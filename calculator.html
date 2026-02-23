@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>CleanCalc Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#f0f4f8;--white:#fff;--navy:#0f1e35;
+  --teal:#0cb8a0;--teal-d:#0a9e88;--teal-light:#e6faf7;
+  --orange:#f46b2b;--orange-light:#fff1ea;
+  --green:#1fba74;--green-light:#e7faf2;
+  --red:#e53e3e;--red-light:#fff5f5;
+  --yellow:#f5a623;--yellow-light:#fffbf0;
+  --purple:#7c3aed;--purple-light:#f3f0ff;
+  --muted:#6b7a90;--border:#dde3ec;--text:#1a2740;
+  --radius:14px;--shadow:0 2px 12px rgba(0,0,0,.07)
+}
+body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans-serif;min-height:100vh;padding-bottom:90px}
+
+/* ── HEADER ── */
+.header{background:var(--navy);padding:13px 15px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:300}
+.hicon{width:34px;height:34px;background:var(--teal);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0}
+.header h1{font-size:16px;font-weight:800;color:#fff;letter-spacing:-.3px}
+.header p{font-size:10px;color:rgba(255,255,255,.4);font-family:'JetBrains Mono',monospace;margin-top:1px}
+.db-ready{margin-left:auto;background:#1fba7420;border:1px solid #1fba7440;color:#1fba74;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;font-family:'JetBrains Mono',monospace;white-space:nowrap}
+.db-empty{margin-left:auto;background:#f46b2b20;border:1px solid #f46b2b40;color:#f46b2b;font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;font-family:'JetBrains Mono',monospace;white-space:nowrap}
+
+/* ── TABS ── */
+.tab-bar{background:var(--white);display:flex;border-bottom:2px solid var(--border);position:sticky;top:57px;z-index:200;overflow-x:auto;scrollbar-width:none}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-btn{flex-shrink:0;flex:1;min-width:60px;padding:9px 3px 7px;text-align:center;font-size:10px;font-weight:700;color:var(--muted);background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;line-height:1.3;margin-bottom:-2px;transition:color .2s}
+.tab-btn .ti{font-size:15px;display:block;margin-bottom:2px}
+.tab-btn.active{color:var(--teal);border-bottom-color:var(--teal)}
+.tab-panel{display:none;padding:12px 12px 0}
+.tab-panel.active{display:block}
+
+/* ── SECTION LABEL ── */
+.slabel{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin:14px 0 7px;display:flex;align-items:center;gap:6px}
+.slabel:first-child{margin-top:4px}
+.snum{width:18px;height:18px;background:var(--teal);border-radius:50%;font-size:10px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.snum.db{background:var(--purple)}
+
+/* ── CARD ── */
+.card{background:var(--white);border-radius:var(--radius);padding:14px;margin-bottom:10px;box-shadow:var(--shadow);border:1px solid var(--border)}
+
+/* ── FIELDS / INPUTS ── */
+.field{margin-bottom:11px}
+.field:last-child{margin-bottom:0}
+.field label{display:flex;align-items:center;gap:5px;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.hint{font-size:11px;color:var(--muted);margin-top:3px}
+.gst-badge{background:#fff3e0;color:#e65100;font-size:10px;font-weight:700;padding:1px 5px;border-radius:4px;font-family:'JetBrains Mono',monospace;border:1px solid #fdc896}
+.auto-badge{background:var(--teal-light);color:var(--teal-d);font-size:10px;font-weight:700;padding:1px 5px;border-radius:4px;font-family:'JetBrains Mono',monospace;border:1px solid #a0ded7}
+.iw{position:relative}
+.iw .px,.iw .sx{position:absolute;top:50%;transform:translateY(-50%);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--muted);pointer-events:none}
+.iw .px{left:11px}.iw .sx{right:11px}
+.iw.px-in input{padding-left:26px}
+.iw.sx-in input{padding-right:40px}
+
+input[type="number"],select{
+  width:100%;padding:10px 12px;font-size:15px;font-weight:600;
+  font-family:'JetBrains Mono',monospace;color:var(--text);
+  background:var(--bg);border:1.5px solid var(--border);
+  border-radius:10px;outline:none;transition:border-color .2s,background .2s;
+  -webkit-appearance:none;appearance:none
+}
+input[type="number"]:focus,select:focus{border-color:var(--teal);background:#fff}
+input.res{background:var(--teal-light);border-color:#a0ded7;color:#0a7a6e;font-weight:700}
+input.res:focus{border-color:var(--teal)}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+
+/* ── DATABASE PRODUCT CARD ── */
+.db-card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:10px;box-shadow:var(--shadow);overflow:hidden}
+.db-head{padding:10px 13px;display:flex;align-items:center;justify-content:space-between}
+.db-head .db-name{font-size:14px;font-weight:800;color:#fff}
+.db-head .db-icon{font-size:18px;margin-right:6px}
+.db-status{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin-left:auto;font-family:'JetBrains Mono',monospace}
+.db-status.ok{background:rgba(31,186,116,.2);color:#1fba74;border:1px solid rgba(31,186,116,.3)}
+.db-status.empty{background:rgba(244,107,43,.2);color:#f46b2b;border:1px solid rgba(244,107,43,.3)}
+.db-body{padding:13px}
+.db-computed{background:var(--navy);border-radius:10px;padding:12px;margin-top:10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;text-align:center}
+.dc-item .dc-l{font-size:9px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
+.dc-item .dc-v{font-size:14px;font-weight:800;color:#fff;font-family:'JetBrains Mono',monospace;line-height:1.1}
+.dc-item .dc-v.tc{color:var(--teal)}.dc-item .dc-v.gc{color:#1fba74}.dc-item .dc-v.oc{color:#ffaa77}
+
+/* ── PRODUCT COLORS ── */
+.head-floor{background:linear-gradient(135deg,#1a3a5c,#0f1e35)}
+.head-dish{background:linear-gradient(135deg,#0a5c4a,#0cb8a0)}
+.head-bath{background:linear-gradient(135deg,#4a1a5c,#7c3aed)}
+.head-toilet{background:linear-gradient(135deg,#5c2a0a,#f46b2b)}
+.head-hand{background:linear-gradient(135deg,#1a4a2a,#1fba74)}
+
+/* ── SAVE BUTTON ── */
+.save-btn{width:100%;padding:14px;background:var(--teal);color:#fff;border:none;border-radius:11px;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:800;cursor:pointer;margin-top:4px;letter-spacing:-.2px;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:8px}
+.save-btn:active{background:var(--teal-d)}
+.save-success{text-align:center;font-size:12px;color:var(--green);font-weight:700;margin-top:8px;display:none}
+
+/* ── PACK BUTTONS ── */
+.pack-row{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:10px}
+.pb{padding:7px 2px;background:var(--bg);border:1.5px solid var(--border);border-radius:9px;font-size:10px;font-weight:700;color:var(--muted);text-align:center;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;line-height:1.4;transition:all .15s}
+.pb .pbml{font-size:12px;font-weight:800;display:block;color:var(--text)}
+.pb.sel{background:var(--teal);border-color:var(--teal);color:#fff}
+.pb.sel .pbml{color:#fff}
+
+/* ── PRODUCT SELECTOR ── */
+.prod-selector{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:12px}
+.psel-btn{padding:8px 3px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;font-size:10px;font-weight:700;color:var(--muted);text-align:center;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;line-height:1.4;transition:all .15s}
+.psel-btn .psel-icon{font-size:17px;display:block;margin-bottom:2px}
+.psel-btn.sel{border-color:var(--teal);background:var(--teal-light);color:var(--teal-d)}
+.psel-btn.not-set{opacity:.45;cursor:not-allowed}
+
+/* ── FETCHED DATA STRIP ── */
+.fetched-strip{background:var(--navy);border-radius:11px;padding:12px 13px;margin-bottom:12px}
+.fetched-strip .fs-title{font-size:10px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;font-family:'JetBrains Mono',monospace}
+.fetched-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.fetched-row:last-child{border-bottom:none}
+.fetched-row .fr-l{font-size:12px;color:rgba(255,255,255,.5);font-weight:500}
+.fetched-row .fr-v{font-size:13px;font-weight:700;font-family:'JetBrains Mono',monospace;color:#fff}
+.fetched-row .fr-v.tc{color:var(--teal)}.fetched-row .fr-v.oc{color:#ffaa77}.fetched-row .fr-v.gc{color:#1fba74}
+.not-configured{background:#f8fafc;border:1.5px dashed var(--border);border-radius:11px;padding:16px;text-align:center;margin-bottom:12px}
+.not-configured p{font-size:12px;color:var(--muted);font-weight:600}
+.not-configured .nc-btn{margin-top:8px;padding:8px 16px;background:var(--teal);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif}
+
+/* ── RESULT ROWS ── */
+.rrow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--border)}
+.rrow:last-child{border-bottom:none}
+.rrow .rl{font-size:13px;color:var(--muted);font-weight:500}
+.rrow .rv{font-size:14px;font-weight:700;font-family:'JetBrains Mono',monospace}
+.rv.tc{color:var(--teal)}.rv.oc{color:var(--orange)}.rv.gc{color:var(--green)}
+
+/* ── RESULT PILLS ── */
+.rpills{display:flex;gap:8px;margin-top:12px}
+.rpill{flex:1;border-radius:12px;padding:12px 7px;text-align:center}
+.rpill.tp{background:var(--teal-light)}.rpill.op{background:var(--orange-light)}.rpill.gp{background:var(--green-light)}
+.rpill .rpl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px}
+.rpill.tp .rpl{color:#0a8a78}.rpill.op .rpl{color:#c04a10}.rpill.gp .rpl{color:#0d8a52}
+.rpill .rpv{font-size:18px;font-weight:800;font-family:'JetBrains Mono',monospace;line-height:1.1}
+.rpill.tp .rpv{color:var(--teal)}.rpill.op .rpv{color:var(--orange)}.rpill.gp .rpv{color:var(--green)}
+.rpill .rps{font-size:10px;color:var(--muted);margin-top:3px}
+
+/* ── LITRE BOX ── */
+.litre-box{background:#fff8f0;border:1px solid #fddbb4;border-radius:10px;padding:11px 13px;margin-top:11px;font-size:12.5px;line-height:1.75;color:#7a4a1e}
+.litre-box strong{font-weight:700}
+
+/* ── PURCHASE SUMMARY ── */
+.purchase-summary{background:var(--navy);border-radius:12px;padding:13px;margin-top:11px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;text-align:center}
+.ps-item .ps-l{font-size:9px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:1px;margin-bottom:3px;font-family:'JetBrains Mono',monospace}
+.ps-item .ps-v{font-size:15px;font-weight:800;color:#fff;font-family:'JetBrains Mono',monospace;line-height:1.1}
+.ps-item .ps-s{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px}
+.ps-item .ps-v.tc{color:var(--teal)}.ps-item .ps-v.oc{color:#ffaa77}
+
+/* ── SYNC BTN ── */
+.sync-btn{width:100%;padding:13px 16px;background:var(--teal);color:#fff;border:none;border-radius:11px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s}
+.sync-btn:active{background:var(--teal-d)}
+.sync-status{text-align:center;font-size:11px;color:var(--green);font-weight:700;margin:-4px 0 8px;display:none}
+
+/* ── ADD/REMOVE BTN ── */
+.add-btn{width:100%;padding:13px;background:var(--white);color:var(--teal);border:2px dashed var(--teal);border-radius:12px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;margin-bottom:10px;transition:background .15s}
+.add-btn:active{background:var(--teal-light)}
+
+/* ── BUNDLE PRODUCT CARD ── */
+.bpcard{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:10px;box-shadow:var(--shadow);overflow:hidden}
+.bphead{padding:10px 13px;display:flex;align-items:center;gap:8px}
+.bpnum{width:22px;height:22px;background:rgba(255,255,255,.15);border-radius:50%;font-size:11px;font-weight:800;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bphead select{background:transparent;border:none;color:#fff;font-size:13px;font-weight:700;font-family:'Plus Jakarta Sans',sans-serif;outline:none;flex:1;padding:0;margin:0}
+.rmbtn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7);border-radius:6px;padding:5px 9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;flex-shrink:0}
+.bpbody{padding:13px}
+
+/* ── BUNDLE FETCHED MINI STRIP ── */
+.bp-fetched{background:#f5f7fa;border:1px solid var(--border);border-radius:9px;padding:9px 11px;margin-bottom:11px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;text-align:center}
+.bpf-item .bpf-l{font-size:9px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.6px;margin-bottom:2px}
+.bpf-item .bpf-v{font-size:12px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--text)}
+.bpf-item .bpf-v.tc{color:var(--teal)}
+
+/* ── BUNDLE RESULT ROW ── */
+.prod-result{background:var(--teal-light);border-radius:9px;padding:9px 11px;margin-top:9px;display:flex;justify-content:space-between;align-items:center}
+.prod-result .prl{font-size:11px;color:#0a7a6e;font-weight:600}
+.prod-result .prv{font-size:14px;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--teal)}
+
+/* ── INFO PILL ── */
+.info-pill{background:var(--teal-light);border:1px solid #a0ded7;border-radius:10px;padding:10px 13px;margin-bottom:10px;font-size:12px;color:#0a7a6e;font-weight:600;line-height:1.6}
+
+hr{border:none;border-top:1px solid var(--border);margin:10px 0}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="hicon">⚗️</div>
+  <div>
+    <h1>CleanCalc Pro</h1>
+    <p>Hotel Powder Supply Calculator</p>
+  </div>
+  <span id="header-status" class="db-empty">DB Empty</span>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('db',this)"><span class="ti">🗄️</span>Products DB</button>
+  <button class="tab-btn" onclick="showTab('single',this)"><span class="ti">🧪</span>Per Sachet</button>
+  <button class="tab-btn" onclick="showTab('bulk',this)"><span class="ti">📦</span>Bulk Order</button>
+  <button class="tab-btn" onclick="showTab('bundle',this)"><span class="ti">🛒</span>Bundle</button>
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 0 — PRODUCTS DATABASE
+══════════════════════════════════════════ -->
+<div id="tab-db" class="tab-panel active">
+
+  <div class="info-pill">
+    🗄️ Set your product costs here once. All other tabs will auto-fill when you pick a product — no re-entering data.
+  </div>
+
+  <!-- FLOOR CLEANER -->
+  <div class="db-card" id="dbc-0">
+    <div class="db-head head-floor">
+      <span class="db-icon">🧹</span>
+      <span class="db-name">Floor Cleaner</span>
+      <span class="db-status empty" id="dbs-0">Not Set</span>
+    </div>
+    <div class="db-body">
+      <div class="two-col">
+        <div class="field"><label>Price / kg <span class="gst-badge">excl. GST</span></label>
+          <div class="iw px-in"><span class="px">₹</span><input type="number" id="db-pkg-0" placeholder="45" oninput="updateDB(0)"></div></div>
+        <div class="field"><label>Stock in hand</label>
+          <div class="iw sx-in"><input type="number" id="db-stock-0" placeholder="25" oninput="updateDB(0)"><span class="sx">kg</span></div></div>
+      </div>
+      <div class="two-col">
+        <div class="field"><label>Grams to make 1 Litre</label>
+          <div class="iw sx-in"><input type="number" id="db-gpl-0" placeholder="80" oninput="updateDB(0)"><span class="sx">g/L</span></div>
+          <div class="hint">How many grams per litre of product</div></div>
+        <div class="field"><label>Mfg cost / sachet</label>
+          <div class="iw px-in"><span class="px">₹</span><input type="number" id="db-mfg-0" placeholder="2.00" oninput="updateDB(0)"></div>
+          <div class="hint">Packaging, labour, filling</div></div>
+      </div>
+      <div class="db-computed" id="dbc-computed-0">
+        <div class="dc-item"><div class="dc-l">₹/kg + GST</div><div class="dc-v tc" id="dcc-gst-0">₹—</div></div>
+        <div class="dc-item"><div class="dc-l">Cost / 1L product</div><div class="dc-v" id="dcc-litre-0">₹—</div></div>
+        <div class="dc-item"><div class="dc-l">Total Stock Value</div><div class="dc-v oc" id="dcc-stock-0">₹—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISH WASH -->
+  <div class="db-card" id="dbc-1">
+    <div class="db-head head-dish">
+      <span class="db-icon">🍽️</span>
+      <span class="db-name">Dish Wash</span>
+      <span class="db-status empty" id="dbs-1">Not Set</span>
+    </div>
+    <div class="db-body">
+      <div class="two-col">
+        <div class="field"><label>Price / kg <span class="gst-badge">excl. GST</span></label>
+          <div class="iw px-in"><span class="px">₹</span><input type="number" id="db-pkg-1" placeholder="55" oninput="updateDB(1)"></div></div>
+        <div class="field"><label>Stock in hand</label>
+          <div class="iw sx-in"><input type="number" id="db-stock-1" placeholder="20" oninput="updateDB(1)"><span class="sx">kg</span></div></div>
+      </div>
+      <div class="two-col">
+        <div class="field"><label>Grams to make 1 Litre</label>
+          <div class="iw sx-in"><input type="number" id="db-gpl-1" placeholder="60" oninput="updateDB(1)"><span class="sx">g/L</span></div></div>
+        <div class="field"><label>Mfg cost / sachet</label>
+          <div class="iw px-in"><span class="px">₹</span><input type="number" id="db-mfg-1" placeholder="2.00" oninput="updateDB(1)"></div></div>
+      </div>
+      <div class="db-computed">
+        <div class="dc-item"><div class="dc-l">₹/kg + GST</div><div class="dc-v tc" id="dcc-gst-1">₹—</div></div>
+        <div class="dc-item"><div class="dc-l">Cost / 1L product</div><div class="dc-v" id="dcc-litre-1">₹—</div></div>
+        <div class="dc-item"><div class="dc-l">Total Stock Value</div><div class="dc-v oc" id="dcc-stock-1">₹—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BATHROOM CLEANER -->
+  <div class="db-card" id="dbc-2">
+    <div class="db-head head-bath">
+      <span class="db-icon">🚿</span>
+      <span class="db-name">Bathroom Cleaner</span>
+      <span class="db-status empty" id="dbs-2">Not Set</span>
+    </div>
+    <div class="db-body">
+      <div class="two-col">
+        <div class="field"><label>Price / kg <span class="gst-badge">excl. GST</span></label>
+          <div class="iw px-in"><span class="px">₹</span><input type="number" id="db-pkg-2" placeholder="50" oninput="updateDB(2)"></div></div>
+        <div class="field"><label>Stock in hand</label>
+          <div class="iw sx-in"><input type="number" id="db-stock-2" placeholder="15" oninput="updateDB(2)"><span class="sx">kg</span></div></div>
+      </div>
+      <div class="two-col">
+        <div class="field"><label>Grams to make 1 Litre</label>
+          <div class="iw sx-in"><input type="number" id="db-gpl-2" placeholder="70" oninput="updateDB(2)"><span class="sx">g/L</span></div></div>
+        <div class="field"><label>Mfg cost / sachet</label>
+          <div class="iw px-in"><span class="px">₹</span><input type="number" id="db-mfg-2" placeholder="2.50" oninput="updateDB(2)"></div></div>
+      </div>
+      <div class="db-computed">
+        <div class="dc-item"><div class="dc-l">₹/kg + GST</div><div class="dc-v tc" id="dcc-gst-2">₹—</div></div>
+        <div class="dc-item"><div class="dc-l">Cost / 1L product</div><div class="dc-v" id="dcc-litre-2">₹—</div></div>
+        <div class="dc-item"><div class="dc-l">Total Stock Value</div><div class="dc-v oc" id="dcc-stock-2">₹—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOILET CLEANER -->
+  <div class="db-card" id="dbc-3">
+    <div class="db-head head-toilet">
+      <span class="db-icon">🚽</span>
+      <span class="db-name">Toilet Cleaner</span>
+      <span class="db-status empty" id="dbs-3">Not Set</span>
+    </div>
+    <div class="db-body">
+      <div class="two-col">
+        <div class="field"><label>Price / kg <span class="gst-badge">excl. GST</span></label>
+          <div class="iw px-in"><span class="px">₹</span><input type="number" id="db-pkg-3" placeholder="48" oninput="updateDB(3)"></div></div>
+        <div class="field"><label>Stock in hand</label>
+          <div class="iw sx-in"><input type="number" id="db-stock-3" placeholder="10" oninput="updateDB(3)"><span class="sx">kg</span></div></div>
+      </div>
+      <div class="two-col">
+        <div class="field"><label>Grams to make 1 Litre</label>
+          <div class="iw sx-in"><input type="number" id="db-gpl-3" placeholder="75" oninput="updateDB(3)"><span class="sx">g/L</span></div></div>
+        <div class="field"><label>Mfg cost / sachet</label>
+          <div class="iw px-in"><span class="px">₹</span><input type="number" id="db-mfg-3" placeholder="2.00" oninput="updateDB(3)"></div></div>
+      </div>
+      <div class="db-computed">
+        <div class="dc-item"><div class="dc-l">₹/kg + GST</div><div class="dc-v tc" id="dcc-gst-3">₹—</div></div>
+        <div class="dc-item"><div class="dc-l">Cost / 1L product</div><div class="dc-v" id="dcc-litre-3">₹—</div></div>
+        <div class="dc-item"><div class="dc-l">Total Stock Value</div><div class="dc-v oc" id="dcc-stock-3">₹—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HAND WASH POWDER -->
+  <div class="db-card" id="dbc-4">
+    <div class="db-head head-hand">
+      <span class="db-icon">🧴</span>
+      <span class="db-name">Hand Wash Powder</span>
+      <span class="db-status empty" id="dbs-4">Not Set</span>
+    </div>
+    <div class="db-body">
+      <div class="two-col">
+        <div class="field"><label>Price / kg <span class="gst-badge">excl. GST</span></label>
+          <div class="iw px-in"><span class="px">₹</span><input type="number" id="db-pkg-4" placeholder="60" oninput="updateDB(4)"></div></div>
+        <div class="field"><label>Stock in hand</label>
+          <div class="iw sx-in"><input type="number" id="db-stock-4" placeholder="12" oninput="updateDB(4)"><span class="sx">kg</span></div></div>
+      </div>
+      <div class="two-col">
+        <div class="field"><label>Grams to make 1 Litre</label>
+          <div class="iw sx-in"><input type="number" id="db-gpl-4" placeholder="50" oninput="updateDB(4)"><span class="sx">g/L</span></div></div>
+        <div class="field"><label>Mfg cost / sachet</label>
+          <div class="iw px-in"><span class="px">₹</span><input type="number" id="db-mfg-4" placeholder="1.80" oninput="updateDB(4)"></div></div>
+      </div>
+      <div class="db-computed">
+        <div class="dc-item"><div class="dc-l">₹/kg + GST</div><div class="dc-v tc" id="dcc-gst-4">₹—</div></div>
+        <div class="dc-item"><div class="dc-l">Cost / 1L product</div><div class="dc-v" id="dcc-litre-4">₹—</div></div>
+        <div class="dc-item"><div class="dc-l">Total Stock Value</div><div class="dc-v oc" id="dcc-stock-4">₹—</div></div>
+      </div>
+    </div>
+  </div>
+
+  <button class="save-btn" onclick="saveDB()">💾 Save All Products to Device</button>
+  <div class="save-success" id="save-success">✅ Saved to your device! Data will be here next time you open this app.</div>
+  <div style="text-align:center;margin-top:10px"><button onclick="clearDB()" style="background:none;border:none;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;font-family:Plus Jakarta Sans,sans-serif;text-decoration:underline;padding:4px 8px">🗑️ Clear all saved data</button></div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 1 — PER SACHET
+══════════════════════════════════════════ -->
+<div id="tab-single" class="tab-panel">
+
+  <!-- PRODUCT SELECTOR -->
+  <div class="slabel"><span class="snum">1</span> Select Product</div>
+  <div class="prod-selector">
+    <button class="psel-btn" id="ps-0" onclick="selectSingleProd(0)"><span class="psel-icon">🧹</span>Floor</button>
+    <button class="psel-btn" id="ps-1" onclick="selectSingleProd(1)"><span class="psel-icon">🍽️</span>Dish</button>
+    <button class="psel-btn" id="ps-2" onclick="selectSingleProd(2)"><span class="psel-icon">🚿</span>Bath</button>
+    <button class="psel-btn" id="ps-3" onclick="selectSingleProd(3)"><span class="psel-icon">🚽</span>Toilet</button>
+    <button class="psel-btn" id="ps-4" onclick="selectSingleProd(4)"><span class="psel-icon">🧴</span>Hand</button>
+  </div>
+
+  <!-- FETCHED DATA STRIP -->
+  <div id="single-fetched" style="display:none">
+    <div class="fetched-strip">
+      <div class="fs-title" id="sf-title">— Product Data</div>
+      <div class="fetched-row"><span class="fr-l">Price/kg (excl. GST)</span><span class="fr-v" id="sf-pkg">₹—</span></div>
+      <div class="fetched-row"><span class="fr-l">Price/kg (incl. 18% GST)</span><span class="fr-v tc" id="sf-pgst">₹—</span></div>
+      <div class="fetched-row"><span class="fr-l">Grams needed per litre</span><span class="fr-v" id="sf-gpl">—</span></div>
+      <div class="fetched-row"><span class="fr-l">Mfg cost / sachet</span><span class="fr-v oc" id="sf-mfg">₹—</span></div>
+      <div class="fetched-row"><span class="fr-l">Stock available</span><span class="fr-v gc" id="sf-stock">—</span></div>
+    </div>
+  </div>
+  <div id="single-notset" class="not-configured" style="display:none">
+    <p>This product is not configured in the database.</p>
+    <button class="nc-btn" onclick="goToDB()">→ Go to Products DB</button>
+  </div>
+
+  <!-- PACK SIZE -->
+  <div class="slabel"><span class="snum">2</span> Choose Pack Size</div>
+  <div class="card">
+    <div class="pack-row">
+      <button class="pb" onclick="pickPack(250,this)"><span class="pbml">250</span>ml</button>
+      <button class="pb" onclick="pickPack(333,this)"><span class="pbml">333</span>ml ⅓L</button>
+      <button class="pb" onclick="pickPack(500,this)"><span class="pbml">500</span>ml ½L</button>
+      <button class="pb" onclick="pickPack(750,this)"><span class="pbml">750</span>ml ¾L</button>
+      <button class="pb" onclick="pickPack(1000,this)"><span class="pbml">1L</span>1000ml</button>
+    </div>
+    <div class="two-col">
+      <div class="field"><label>Powder per sachet <span class="auto-badge">AUTO</span></label>
+        <div class="iw sx-in"><input type="number" id="s-grams" class="res" readonly><span class="sx" style="color:var(--teal)">g</span></div>
+        <div class="hint">From DB: grams × pack litres</div></div>
+      <div class="field"><label>Pack size (ml)</label>
+        <div class="iw sx-in"><input type="number" id="s-ml" placeholder="500" oninput="calcSingle()"><span class="sx">ml</span></div></div>
+    </div>
+    <div class="field"><label>Product yield per sachet</label>
+      <div class="iw sx-in"><input type="number" id="s-liters" class="res" readonly><span class="sx" style="color:var(--teal)">L</span></div></div>
+  </div>
+
+  <!-- COSTS -->
+  <div class="slabel"><span class="snum">3</span> Costs &amp; Margin</div>
+  <div class="card">
+    <div class="field"><label>Powder cost / sachet <span class="auto-badge">AUTO</span></label>
+      <div class="iw px-in"><span class="px" style="color:var(--teal)">₹</span><input type="number" id="s-landed" class="res" readonly></div>
+      <div class="hint">GST-inclusive rate × grams in sachet</div></div>
+    <div class="field"><label>Production cost / sachet <span class="auto-badge">AUTO</span></label>
+      <div class="iw px-in"><span class="px" style="color:var(--teal)">₹</span><input type="number" id="s-prod" class="res" readonly></div>
+      <div class="hint">Fetched from Products DB</div></div>
+    <div class="field"><label>Your margin</label>
+      <div class="iw sx-in"><input type="number" id="s-margin" placeholder="30" oninput="calcSingle()" min="0" max="100"><span class="sx">%</span></div></div>
+  </div>
+
+  <!-- RESULT -->
+  <div class="slabel"><span class="snum">4</span> Result — Per Sachet</div>
+  <div class="card">
+    <div class="rrow"><span class="rl">Powder cost (incl. GST)</span><span class="rv" id="r1">₹—</span></div>
+    <div class="rrow"><span class="rl">Production / mfg cost</span><span class="rv" id="r2">₹—</span></div>
+    <div class="rrow"><span class="rl">Total cost (your spend)</span><span class="rv" id="r3">₹—</span></div>
+    <div class="rrow"><span class="rl">Your profit amount</span><span class="rv gc" id="r4">₹—</span></div>
+    <div class="rpills">
+      <div class="rpill tp"><div class="rpl">Selling Price</div><div class="rpv" id="r5">₹—</div><div class="rps" id="r5s">— ml pack</div></div>
+      <div class="rpill gp"><div class="rpl">Your Profit</div><div class="rpv" id="r6">₹—</div><div class="rps" id="r6s">—% margin</div></div>
+    </div>
+    <div class="litre-box" id="litre-box" style="display:none">
+      <strong>📊 Per-Litre View</strong> — This sachet makes <strong id="lb1">—</strong>L.<br>
+      Your cost <strong id="lb2">₹—</strong> ÷ <span id="lb3">—</span>L = <strong id="lb4">₹— / litre</strong><br>
+      Sell price <strong id="lb5">₹—</strong> ÷ <span id="lb6">—</span>L = <strong id="lb7">₹— / litre</strong>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 2 — BULK ORDER
+══════════════════════════════════════════ -->
+<div id="tab-bulk" class="tab-panel">
+
+  <!-- PRODUCT SELECTOR -->
+  <div class="slabel"><span class="snum">1</span> Select Product</div>
+  <div class="prod-selector">
+    <button class="psel-btn" id="bp-0" onclick="selectBulkProd(0)"><span class="psel-icon">🧹</span>Floor</button>
+    <button class="psel-btn" id="bp-1" onclick="selectBulkProd(1)"><span class="psel-icon">🍽️</span>Dish</button>
+    <button class="psel-btn" id="bp-2" onclick="selectBulkProd(2)"><span class="psel-icon">🚿</span>Bath</button>
+    <button class="psel-btn" id="bp-3" onclick="selectBulkProd(3)"><span class="psel-icon">🚽</span>Toilet</button>
+    <button class="psel-btn" id="bp-4" onclick="selectBulkProd(4)"><span class="psel-icon">🧴</span>Hand</button>
+  </div>
+
+  <!-- FETCHED DATA STRIP -->
+  <div id="bulk-fetched" style="display:none">
+    <div class="fetched-strip">
+      <div class="fs-title" id="bf-title">— Product Data</div>
+      <div class="fetched-row"><span class="fr-l">Price/kg (incl. 18% GST)</span><span class="fr-v tc" id="bf-pgst">₹—</span></div>
+      <div class="fetched-row"><span class="fr-l">Grams per litre</span><span class="fr-v" id="bf-gpl">—</span></div>
+      <div class="fetched-row"><span class="fr-l">Mfg cost / sachet</span><span class="fr-v oc" id="bf-mfg">₹—</span></div>
+      <div class="fetched-row"><span class="fr-l">Stock available</span><span class="fr-v gc" id="bf-stock">—</span></div>
+    </div>
+  </div>
+  <div id="bulk-notset" class="not-configured" style="display:none">
+    <p>This product is not configured in the database.</p>
+    <button class="nc-btn" onclick="goToDB()">→ Go to Products DB</button>
+  </div>
+
+  <!-- BULK CONFIG -->
+  <div class="slabel"><span class="snum">2</span> Order Details</div>
+  <div class="card">
+    <div class="field"><label>Number of sachets</label>
+      <div class="iw sx-in"><input type="number" id="b-count" placeholder="20" oninput="calcBulk()" min="1"><span class="sx">pcs</span></div></div>
+    <div class="two-col">
+      <div class="field"><label>Pack size</label>
+        <div class="iw sx-in"><input type="number" id="b-ml" placeholder="500" oninput="calcBulk()"><span class="sx">ml</span></div></div>
+      <div class="field"><label>Your margin</label>
+        <div class="iw sx-in"><input type="number" id="b-margin" placeholder="30" oninput="calcBulk()"><span class="sx">%</span></div></div>
+    </div>
+    <div class="two-col">
+      <div class="field"><label>Powder/sachet <span class="auto-badge">AUTO</span></label>
+        <div class="iw sx-in"><input type="number" id="b-grams" class="res" readonly><span class="sx" style="color:var(--teal)">g</span></div></div>
+      <div class="field"><label>Mfg cost/sachet <span class="auto-badge">AUTO</span></label>
+        <div class="iw px-in"><span class="px" style="color:var(--teal)">₹</span><input type="number" id="b-prod" class="res" readonly></div></div>
+    </div>
+    <div class="field"><label>Powder cost/sachet <span class="auto-badge">AUTO</span></label>
+      <div class="iw px-in"><span class="px" style="color:var(--teal)">₹</span><input type="number" id="b-landed" class="res" readonly></div></div>
+  </div>
+
+  <!-- BULK RESULTS -->
+  <div class="slabel"><span class="snum">3</span> Bulk Results</div>
+  <div class="card">
+    <div class="rrow"><span class="rl">Total powder used</span><span class="rv tc" id="br1">—</span></div>
+    <div class="rrow"><span class="rl">Total product yield</span><span class="rv" id="br2">—</span></div>
+    <div class="rrow"><span class="rl">Stock remaining after this order</span><span class="rv gc" id="br-stock">—</span></div>
+    <div class="rrow"><span class="rl">Total powder cost (incl. GST)</span><span class="rv" id="br3">₹—</span></div>
+    <div class="rrow"><span class="rl">Total production cost</span><span class="rv" id="br4">₹—</span></div>
+    <div class="rrow"><span class="rl">Total spend (your cost)</span><span class="rv" id="br5">₹—</span></div>
+    <div class="rrow"><span class="rl">Total profit</span><span class="rv gc" id="br6">₹—</span></div>
+    <div class="rpills">
+      <div class="rpill tp"><div class="rpl">Total Selling Price</div><div class="rpv" id="br7">₹—</div><div class="rps" id="br7s">— sachets</div></div>
+      <div class="rpill op"><div class="rpl">Price / Sachet</div><div class="rpv" id="br8">₹—</div><div class="rps" id="br8s">₹— profit each</div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     TAB 3 — BUNDLE
+══════════════════════════════════════════ -->
+<div id="tab-bundle" class="tab-panel">
+
+  <div class="info-pill">🛒 Add multiple products. Each fetches its own DB data automatically when you pick it.</div>
+
+  <div class="slabel"><span class="snum">1</span> Products in Bundle</div>
+  <div id="bprods"></div>
+  <button class="add-btn" onclick="addBundleProd()">+ Add Product</button>
+
+  <div id="bsummary" style="display:none">
+    <div class="slabel"><span class="snum">2</span> Bundle Options</div>
+    <div class="card">
+      <div class="two-col">
+        <div class="field"><label>Override margin %</label>
+          <div class="iw sx-in"><input type="number" id="bun-mg" placeholder="Blank = per-product" oninput="calcBundle()"><span class="sx">%</span></div>
+          <div class="hint">One margin for all</div></div>
+        <div class="field"><label>Customer discount %</label>
+          <div class="iw sx-in"><input type="number" id="bun-disc" placeholder="0" oninput="calcBundle()"><span class="sx">%</span></div>
+          <div class="hint">% off final price</div></div>
+      </div>
+    </div>
+
+    <div class="slabel"><span class="snum">3</span> Bundle Summary</div>
+    <div class="card">
+      <div class="rrow"><span class="rl">Total sachets</span><span class="rv tc" id="bn1">—</span></div>
+      <div class="rrow"><span class="rl">Total powder weight</span><span class="rv" id="bn2">—</span></div>
+      <div class="rrow"><span class="rl">Total product yield</span><span class="rv" id="bn3">—</span></div>
+      <div class="rrow"><span class="rl">Total spend (your cost)</span><span class="rv" id="bn4">₹—</span></div>
+      <div class="rrow"><span class="rl">Customer saves (discount)</span><span class="rv oc" id="bn5">₹—</span></div>
+      <div class="rrow"><span class="rl">Your profit</span><span class="rv gc" id="bn6">₹—</span></div>
+      <div class="rrow"><span class="rl">Effective margin</span><span class="rv" id="bn7">—</span></div>
+      <div class="rpills">
+        <div class="rpill tp"><div class="rpl">Bundle Price</div><div class="rpv" id="bn8">₹—</div><div class="rps" id="bn8s">total</div></div>
+        <div class="rpill gp"><div class="rpl">Your Profit</div><div class="rpv" id="bn9">₹—</div><div class="rps" id="bn9s">—% margin</div></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════
+   CONSTANTS & HELPERS
+═══════════════════════════════════════════ */
+const GST = 0.18;
+const PROD_NAMES  = ['Floor Cleaner','Dish Wash','Bathroom Cleaner','Toilet Cleaner','Hand Wash Powder'];
+const PROD_ICONS  = ['🧹','🍽️','🚿','🚽','🧴'];
+const PROD_HEADS  = ['head-floor','head-dish','head-bath','head-toilet','head-hand'];
+
+const f  = (n,d=2)=>(!n||isNaN(n))?'—':n.toFixed(d);
+const fR = n=>(n&&!isNaN(n)&&n>0)?`₹${f(n)}`:'₹—';
+const gv = id=>{const v=parseFloat(document.getElementById(id)?.value);return isNaN(v)?0:v;};
+const sv = (id,v)=>{const el=document.getElementById(id);if(el)el.value=(v&&!isNaN(v)&&v>0)?v.toFixed(2):''};
+const st = (id,t)=>{const el=document.getElementById(id);if(el)el.textContent=t;};
+
+/* ═══════════════════════════════════════════
+   DATABASE  —  backed by localStorage
+   Key: 'cleancalc_db'
+   Data: array of 5 objects or nulls
+═══════════════════════════════════════════ */
+const LS_KEY = 'cleancalc_db_v1';
+
+// db[i] = { pkg, stock, gpl, mfg }  (excl GST)
+let db = [null,null,null,null,null];
+
+/* ── Load saved data from localStorage on startup ── */
+function loadDBFromStorage(){
+  try {
+    const raw = localStorage.getItem(LS_KEY);
+    if(!raw) return;
+    const saved = JSON.parse(raw);
+    if(!Array.isArray(saved) || saved.length !== 5) return;
+    db = saved;
+    // Populate the input fields with saved values
+    for(let i=0;i<5;i++){
+      if(db[i]){
+        const p = db[i];
+        const setField = (id, val) => {
+          const el = document.getElementById(id);
+          if(el && val) el.value = parseFloat(val).toFixed(2);
+        };
+        setField(`db-pkg-${i}`,   p.pkg);
+        setField(`db-stock-${i}`, p.stock);
+        setField(`db-gpl-${i}`,   p.gpl);
+        setField(`db-mfg-${i}`,   p.mfg);
+      }
+    }
+  } catch(e){ console.warn('Could not load DB from storage', e); }
+}
+
+function updateDB(i){
+  const pkg   = gv(`db-pkg-${i}`);
+  const stock = gv(`db-stock-${i}`);
+  const gpl   = gv(`db-gpl-${i}`);
+  const mfg   = gv(`db-mfg-${i}`);
+
+  const pkgGst  = pkg  * (1+GST);
+  const costPerL= pkgGst>0&&gpl>0 ? (pkgGst/1000)*gpl : 0;
+  const stockVal= pkg>0&&stock>0  ? pkg*stock*(1+GST)  : 0;
+
+  st(`dcc-gst-${i}`,   pkgGst>0   ? `₹${f(pkgGst)}`   : '₹—');
+  st(`dcc-litre-${i}`, costPerL>0 ? `₹${f(costPerL)}`  : '₹—');
+  st(`dcc-stock-${i}`, stockVal>0 ? `₹${f(stockVal)}`  : '₹—');
+
+  const badge = document.getElementById(`dbs-${i}`);
+  if(pkg>0 && gpl>0 && mfg>0){
+    badge.textContent='✓ Set';
+    badge.className='db-status ok';
+  } else {
+    badge.textContent='Not Set';
+    badge.className='db-status empty';
+  }
+}
+
+function saveDB(){
+  for(let i=0;i<5;i++){
+    const pkg   = gv(`db-pkg-${i}`);
+    const stock = gv(`db-stock-${i}`);
+    const gpl   = gv(`db-gpl-${i}`);
+    const mfg   = gv(`db-mfg-${i}`);
+    if(pkg>0&&gpl>0&&mfg>0){
+      db[i]={pkg,stock,gpl,mfg};
+    } else {
+      db[i]=null;
+    }
+  }
+
+  // ── Persist to localStorage ──
+  try {
+    localStorage.setItem(LS_KEY, JSON.stringify(db));
+  } catch(e){ console.warn('Could not save to localStorage', e); }
+
+  for(let i=0;i<5;i++) updateDB(i);
+  updateHeaderBadge();
+
+  const ss = document.getElementById('save-success');
+  ss.style.display='block';
+  setTimeout(()=>ss.style.display='none',3500);
+
+  refreshSelectorStates();
+}
+
+function updateHeaderBadge(){
+  const anySet = db.some(x=>x!==null);
+  const allSet = db.every(x=>x!==null);
+  const hs = document.getElementById('header-status');
+  hs.textContent = allSet ? 'DB Ready ✓' : anySet ? 'DB Partial' : 'DB Empty';
+  hs.className   = allSet ? 'db-ready'   : anySet ? 'db-ready'   : 'db-empty';
+}
+
+function refreshSelectorStates(){
+  // Single
+  for(let i=0;i<5;i++){
+    const el=document.getElementById(`ps-${i}`);
+    if(el){ el.classList.toggle('not-set', !db[i]); }
+    const el2=document.getElementById(`bp-${i}`);
+    if(el2){ el2.classList.toggle('not-set', !db[i]); }
+  }
+}
+
+function goToDB(){
+  document.querySelectorAll('.tab-btn')[0].click();
+}
+
+/* ═══════════════════════════════════════════
+   SINGLE SACHET
+═══════════════════════════════════════════ */
+let singleProd = -1;
+
+function selectSingleProd(i){
+  singleProd = i;
+  document.querySelectorAll('[id^="ps-"]').forEach(b=>b.classList.remove('sel'));
+  document.getElementById(`ps-${i}`).classList.add('sel');
+
+  const sf  = document.getElementById('single-fetched');
+  const sns = document.getElementById('single-notset');
+
+  if(!db[i]){
+    sf.style.display='none';
+    sns.style.display='block';
+    return;
+  }
+  sf.style.display='block';
+  sns.style.display='none';
+
+  const p = db[i];
+  const pkgGst = p.pkg*(1+GST);
+  st('sf-title',  PROD_ICONS[i]+' '+PROD_NAMES[i]+' — fetched from DB');
+  st('sf-pkg',    `₹${f(p.pkg)}`);
+  st('sf-pgst',   `₹${f(pkgGst)}`);
+  st('sf-gpl',    `${f(p.gpl)} g/L`);
+  st('sf-mfg',    `₹${f(p.mfg)}`);
+  st('sf-stock',  p.stock>0 ? `${f(p.stock)} kg` : '—');
+
+  // Pre-fill prod cost
+  sv('s-prod', p.mfg);
+  calcSingle();
+}
+
+function pickPack(ml,btn){
+  document.querySelectorAll('.pb').forEach(b=>b.classList.remove('sel'));
+  btn.classList.add('sel');
+  const el=document.getElementById('s-ml');
+  if(el) el.value=ml;
+  calcSingle();
+}
+
+function calcSingle(){
+  const ml    = gv('s-ml');
+  const mg    = gv('s-margin');
+  const litres= ml>0 ? ml/1000 : 0;
+
+  // Get from DB if product selected
+  let pkgGst=0, mfgCost=0, gramsPerSachet=0;
+  if(singleProd>=0 && db[singleProd]){
+    const p=db[singleProd];
+    pkgGst       = p.pkg*(1+GST);
+    mfgCost      = p.mfg;
+    gramsPerSachet= litres>0 ? p.gpl*litres : 0;  // grams = g/L × litres in pack
+  }
+
+  sv('s-grams',  gramsPerSachet>0 ? gramsPerSachet : null);
+  sv('s-liters', litres>0 ? litres : null);
+
+  const pwdCost = pkgGst>0 && gramsPerSachet>0 ? (pkgGst/1000)*gramsPerSachet : 0;
+  sv('s-landed', pwdCost>0 ? pwdCost : null);
+  sv('s-prod',   mfgCost>0 ? mfgCost : null);
+
+  const total   = pwdCost+mfgCost;
+  const profAmt = total*(mg/100);
+  const sell    = total+profAmt;
+  const cpl     = litres>0 ? total/litres : 0;
+  const spl     = litres>0 ? sell/litres  : 0;
+
+  st('r1', fR(pwdCost));
+  st('r2', mfgCost>0 ? fR(mfgCost) : '₹—');
+  st('r3', fR(total));
+  st('r4', profAmt>0 ? fR(profAmt) : '₹—');
+  st('r5', fR(sell));
+  st('r5s', ml>0 ? `${ml}ml pack` : '— ml pack');
+  st('r6', sell>0 ? fR(sell-total) : '₹—');
+  st('r6s', mg>0 ? `${mg}% margin` : '—% margin');
+
+  const lb=document.getElementById('litre-box');
+  if(litres>0&&total>0){
+    lb.style.display='block';
+    st('lb1',f(litres)); st('lb2',fR(total)); st('lb3',f(litres)); st('lb4',`₹${f(cpl)} / litre`);
+    st('lb5',fR(sell));  st('lb6',f(litres)); st('lb7',`₹${f(spl)} / litre`);
+  } else lb.style.display='none';
+}
+
+/* ═══════════════════════════════════════════
+   BULK ORDER
+═══════════════════════════════════════════ */
+let bulkProd = -1;
+
+function selectBulkProd(i){
+  bulkProd = i;
+  document.querySelectorAll('[id^="bp-"]').forEach(b=>b.classList.remove('sel'));
+  document.getElementById(`bp-${i}`).classList.add('sel');
+
+  const bf  = document.getElementById('bulk-fetched');
+  const bns = document.getElementById('bulk-notset');
+
+  if(!db[i]){
+    bf.style.display='none';
+    bns.style.display='block';
+    // Clear auto fields
+    sv('b-grams',null); sv('b-prod',null); sv('b-landed',null);
+    calcBulk();
+    return;
+  }
+  bf.style.display='block';
+  bns.style.display='none';
+
+  const p=db[i];
+  const pkgGst=p.pkg*(1+GST);
+  st('bf-title',  PROD_ICONS[i]+' '+PROD_NAMES[i]);
+  st('bf-pgst',   `₹${f(pkgGst)}`);
+  st('bf-gpl',    `${f(p.gpl)} g/L`);
+  st('bf-mfg',    `₹${f(p.mfg)}`);
+  st('bf-stock',  p.stock>0 ? `${f(p.stock)} kg` : '—');
+
+  sv('b-prod', p.mfg);
+  calcBulk();
+}
+
+function calcBulk(){
+  const n   = gv('b-count');
+  const ml  = gv('b-ml');
+  const mg  = gv('b-margin');
+  const litresEach = ml>0 ? ml/1000 : 0;
+
+  let pkgGst=0, gpl=0, mfgCost=0, stockKg=0;
+  if(bulkProd>=0 && db[bulkProd]){
+    const p=db[bulkProd];
+    pkgGst  = p.pkg*(1+GST);
+    gpl     = p.gpl;
+    mfgCost = p.mfg;
+    stockKg = p.stock;
+  }
+
+  const gramsEach  = litresEach>0 ? gpl*litresEach : 0;
+  const pwdCostEa  = pkgGst>0&&gramsEach>0 ? (pkgGst/1000)*gramsEach : 0;
+
+  sv('b-grams',  gramsEach>0  ? gramsEach  : null);
+  sv('b-prod',   mfgCost>0    ? mfgCost    : null);
+  sv('b-landed', pwdCostEa>0  ? pwdCostEa  : null);
+
+  const totalG  = n*gramsEach;
+  const totalL  = n*litresEach;
+  const totLd   = n*pwdCostEa;
+  const totPd   = n*mfgCost;
+  const totC    = totLd+totPd;
+  const prof    = totC*(mg/100);
+  const sell    = totC+prof;
+  const profT   = sell-totC;
+  const perS    = n>0 ? sell/n : 0;
+  const profS   = n>0 ? profT/n : 0;
+  const stockLeft= stockKg>0&&totalG>0 ? stockKg-(totalG/1000) : null;
+
+  st('br1', totalG>0 ? `${f(totalG)}g  (${f(totalG/1000)} kg)` : '—');
+  st('br2', totalL>0 ? `${f(totalL)} litres` : '—');
+  st('br-stock', stockLeft!==null ? (stockLeft>=0 ? `${f(stockLeft)} kg left` : '⚠️ Insufficient stock') : '—');
+  st('br3', fR(totLd));
+  st('br4', fR(totPd));
+  st('br5', fR(totC));
+  st('br6', fR(profT));
+  st('br7', fR(sell));
+  st('br7s', n>0 ? `${n} sachets` : '—');
+  st('br8', fR(perS));
+  st('br8s', profS>0 ? `₹${f(profS)} profit each` : '—');
+}
+
+/* ═══════════════════════════════════════════
+   BUNDLE
+═══════════════════════════════════════════ */
+let bundleItems=[], nid=1;
+
+function addBundleProd(){ bundleItems.push(nid++); renderBundle(); }
+
+function removeBundleProd(id){
+  bundleItems=bundleItems.filter(x=>x!==id);
+  document.getElementById(`bpc-${id}`)?.remove();
+  document.getElementById('bsummary').style.display=bundleItems.length>0?'block':'none';
+  updateBundleNumbers();
+  calcBundle();
+}
+
+function updateBundleNumbers(){
+  document.querySelectorAll('.bpnum').forEach((el,i)=>el.textContent=i+1);
+}
+
+function renderBundle(){
+  const c=document.getElementById('bprods');
+  bundleItems.forEach(id=>{
+    if(document.getElementById(`bpc-${id}`)) return;
+    const d=document.createElement('div');
+    d.className='bpcard'; d.id=`bpc-${id}`;
+    d.innerHTML=`
+      <div class="bphead ${PROD_HEADS[0]}">
+        <div class="bpnum">1</div>
+        <select id="bpsel-${id}" onchange="onBundleProdChange(${id})">
+          ${PROD_NAMES.map((p,i)=>`<option value="${i}">${PROD_ICONS[i]} ${p}</option>`).join('')}
+        </select>
+        <button class="rmbtn" onclick="removeBundleProd(${id})">✕</button>
+      </div>
+      <div class="bpbody">
+        <!-- Mini fetched strip -->
+        <div class="bp-fetched" id="bpf-${id}">
+          <div class="bpf-item"><div class="bpf-l">₹/kg+GST</div><div class="bpf-v tc" id="bpf-pkg-${id}">—</div></div>
+          <div class="bpf-item"><div class="bpf-l">g/L</div><div class="bpf-v" id="bpf-gpl-${id}">—</div></div>
+          <div class="bpf-item"><div class="bpf-l">Mfg/sachet</div><div class="bpf-v" id="bpf-mfg-${id}">—</div></div>
+        </div>
+        <div class="two-col">
+          <div class="field"><label>Sachets</label>
+            <div class="iw sx-in"><input type="number" id="bpq-${id}" value="1" min="1" oninput="calcBundle()"><span class="sx">pcs</span></div></div>
+          <div class="field"><label>Pack size</label>
+            <div class="iw sx-in"><input type="number" id="bpm-${id}" placeholder="500" oninput="calcBundle()"><span class="sx">ml</span></div></div>
+          <div class="field"><label>Margin %</label>
+            <div class="iw sx-in"><input type="number" id="bpmg-${id}" placeholder="30" oninput="calcBundle()"><span class="sx">%</span></div></div>
+          <div class="field"><label>Powder cost/pc <span class="auto-badge">AUTO</span></label>
+            <div class="iw px-in"><span class="px" style="color:var(--teal)">₹</span><input type="number" id="bpl-${id}" class="res" readonly></div></div>
+        </div>
+        <div class="prod-result">
+          <span id="bpr-lbl-${id}" style="font-size:11px;color:#0a7a6e;font-weight:600">Pick pack size to calculate</span>
+          <span id="bpr-val-${id}" style="font-size:14px;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--teal)">₹—</span>
+        </div>
+      </div>`;
+    c.appendChild(d);
+    onBundleProdChange(id); // populate fetched data immediately
+  });
+  updateBundleNumbers();
+  document.getElementById('bsummary').style.display=bundleItems.length>0?'block':'none';
+  calcBundle();
+}
+
+function onBundleProdChange(id){
+  const sel  = document.getElementById(`bpsel-${id}`);
+  if(!sel) return;
+  const idx  = parseInt(sel.value);
+
+  // Update header color
+  const head = sel.closest('.bphead');
+  if(head){
+    head.className='bphead '+PROD_HEADS[idx];
+  }
+
+  // Populate mini fetch strip
+  if(db[idx]){
+    const p=db[idx];
+    const pkgGst=p.pkg*(1+GST);
+    st(`bpf-pkg-${id}`, `₹${f(pkgGst)}`);
+    st(`bpf-gpl-${id}`, `${f(p.gpl)}g/L`);
+    st(`bpf-mfg-${id}`, `₹${f(p.mfg)}`);
+  } else {
+    st(`bpf-pkg-${id}`,'—'); st(`bpf-gpl-${id}`,'—'); st(`bpf-mfg-${id}`,'—');
+  }
+  calcBundle();
+}
+
+function calcBundle(){
+  let tG=0,tL=0,tLd=0,tMfg=0,tSellBase=0,tS=0;
+
+  bundleItems.forEach(id=>{
+    const sel = document.getElementById(`bpsel-${id}`);
+    if(!sel) return;
+    const idx = parseInt(sel.value);
+    const qty = parseFloat(document.getElementById(`bpq-${id}`)?.value)||0;
+    const ml  = parseFloat(document.getElementById(`bpm-${id}`)?.value)||0;
+    const mg  = parseFloat(document.getElementById(`bpmg-${id}`)?.value)||0;
+    const litresEach = ml>0 ? ml/1000 : 0;
+
+    let pkgGst=0, gpl=0, mfgCost=0;
+    if(db[idx]){
+      const p=db[idx];
+      pkgGst  =p.pkg*(1+GST);
+      gpl     =p.gpl;
+      mfgCost =p.mfg;
+    }
+
+    const gramsEach = litresEach>0 ? gpl*litresEach : 0;
+    const pwdCostEa = pkgGst>0&&gramsEach>0 ? (pkgGst/1000)*gramsEach : 0;
+
+    sv(`bpl-${id}`, pwdCostEa>0 ? pwdCostEa : null);
+
+    tS   += qty;
+    tG   += qty*gramsEach;
+    tL   += qty*litresEach;
+    tLd  += qty*pwdCostEa;
+    tMfg += qty*mfgCost;
+
+    const pCost = (pwdCostEa+mfgCost)*qty;
+    const pSell = pCost*(1+mg/100);
+    tSellBase += pSell;
+
+    // Per-product result
+    const lbl=document.getElementById(`bpr-lbl-${id}`);
+    const val=document.getElementById(`bpr-val-${id}`);
+    if(lbl&&val){
+      if(pSell>0){
+        lbl.textContent=`${qty}pcs × ${ml}ml — cost ₹${f(pCost)} — profit ₹${f(pSell-pCost)}`;
+        val.textContent=`₹${f(pSell)}`;
+      } else {
+        lbl.textContent='Pick pack size to calculate';
+        val.textContent='₹—';
+      }
+    }
+  });
+
+  const tC    = tLd+tMfg;
+  const bunMg = parseFloat(document.getElementById('bun-mg')?.value);
+  const disc  = parseFloat(document.getElementById('bun-disc')?.value)||0;
+  let base    = isNaN(bunMg) ? tSellBase : tC*(1+bunMg/100);
+  const discAmt=base*(disc/100);
+  const final =base-discAmt;
+  const profit=final-tC;
+  const effMg =tC>0?(profit/tC)*100:0;
+
+  st('bn1', tS>0?`${tS} sachets`:'—');
+  st('bn2', tG>0?`${f(tG)}g / ${f(tG/1000)}kg`:'—');
+  st('bn3', tL>0?`${f(tL)} litres`:'—');
+  st('bn4', fR(tC));
+  st('bn5', discAmt>0?fR(discAmt):'₹0.00');
+  st('bn6', fR(profit));
+  st('bn7', tC>0?`${f(effMg)}%`:'—');
+  st('bn8', fR(final));
+  st('bn8s', tS>0?`${tS} sachets total`:'total');
+  st('bn9', fR(profit));
+  st('bn9s', tC>0?`${f(effMg)}% eff. margin`:'—');
+}
+
+/* ═══════════════════════════════════════════
+   TABS
+═══════════════════════════════════════════ */
+function showTab(name,btn){
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(`tab-${name}`).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ═══════════════════════════════════════════
+   CLEAR ALL DATA
+═══════════════════════════════════════════ */
+function clearDB(){
+  if(!confirm('Clear all product data? This cannot be undone.')) return;
+  localStorage.removeItem(LS_KEY);
+  db=[null,null,null,null,null];
+  for(let i=0;i<5;i++){
+    ['db-pkg','db-stock','db-gpl','db-mfg'].forEach(k=>{
+      const el=document.getElementById(`${k}-${i}`);
+      if(el) el.value='';
+    });
+    updateDB(i);
+  }
+  updateHeaderBadge();
+  refreshSelectorStates();
+  alert('Product database cleared.');
+}
+
+/* ═══════════════════════════════════════════
+   STARTUP — restore from localStorage
+═══════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', ()=>{
+  loadDBFromStorage();
+  for(let i=0;i<5;i++) updateDB(i);
+  updateHeaderBadge();
+  refreshSelectorStates();
+});
+</script>
+</body>
+</html>
