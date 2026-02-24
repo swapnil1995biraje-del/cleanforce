@@ -12,7 +12,7 @@
   --teal:#0cb8a0;--teal-d:#0a9e88;--teal-light:#e6faf7;
   --orange:#f46b2b;--orange-light:#fff1ea;
   --green:#1fba74;--green-light:#e7faf2;
-  --yellow:#f5a623;
+  --yellow:#f5a623;--blue:#3b82f6;--blue-light:#eff6ff;
   --purple-light:#f3f0ff;
   --muted:#6b7a90;--border:#dde3ec;--text:#1a2740;
   --radius:14px;--shadow:0 2px 12px rgba(0,0,0,.07)
@@ -32,8 +32,9 @@ body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans
 #hbadge.error{background:#e53e3e20;border-color:#e53e3e40;color:#e53e3e}
 
 /* TABS */
-.tab-bar{background:var(--white);display:flex;border-bottom:2px solid var(--border);position:sticky;top:57px;z-index:200}
-.tab-btn{flex:1;padding:9px 3px 7px;text-align:center;font-size:10px;font-weight:700;color:var(--muted);background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;line-height:1.3;margin-bottom:-2px}
+.tab-bar{background:var(--white);display:flex;border-bottom:2px solid var(--border);position:sticky;top:57px;z-index:200;overflow-x:auto;scrollbar-width:none}
+.tab-bar::-webkit-scrollbar{display:none}
+.tab-btn{flex:1;min-width:58px;padding:9px 3px 7px;text-align:center;font-size:10px;font-weight:700;color:var(--muted);background:none;border:none;border-bottom:3px solid transparent;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;line-height:1.3;margin-bottom:-2px;white-space:nowrap}
 .tab-btn .ti{font-size:15px;display:block;margin-bottom:2px}
 .tab-btn.active{color:var(--teal);border-bottom-color:var(--teal)}
 .tab-panel{display:none;padding:12px 12px 0}
@@ -61,11 +62,12 @@ body{background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans',sans
 .iw .px{left:11px}.iw .sx{right:11px}
 .iw.px-in input{padding-left:26px}
 .iw.sx-in input{padding-right:40px}
-input[type="number"],select{width:100%;padding:10px 12px;font-size:15px;font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--text);background:var(--bg);border:1.5px solid var(--border);border-radius:10px;outline:none;-webkit-appearance:none;appearance:none}
-input[type="number"]:focus{border-color:var(--teal);background:#fff}
+input[type="number"],input[type="text"],select{width:100%;padding:10px 12px;font-size:15px;font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--text);background:var(--bg);border:1.5px solid var(--border);border-radius:10px;outline:none;-webkit-appearance:none;appearance:none}
+input[type="number"]:focus,input[type="text"]:focus{border-color:var(--teal);background:#fff}
 input.res{background:var(--teal-light);border-color:#a0ded7;color:#0a7a6e;font-weight:700}
 
 .two-col{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
 
 /* DB PRODUCT CARD */
 .db-card{background:var(--white);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:10px;box-shadow:var(--shadow);overflow:hidden}
@@ -79,7 +81,7 @@ input.res{background:var(--teal-light);border-color:#a0ded7;color:#0a7a6e;font-w
 .db-computed{background:var(--navy);border-radius:10px;padding:12px;margin-top:10px;display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;text-align:center}
 .dc-l{font-size:9px;font-weight:700;color:rgba(255,255,255,.4);text-transform:uppercase;letter-spacing:.8px;margin-bottom:3px}
 .dc-v{font-size:14px;font-weight:800;font-family:'JetBrains Mono',monospace;line-height:1.1;color:#fff}
-.dc-v.tc{color:var(--teal)}.dc-v.oc{color:#ffaa77}.dc-v.gc{color:#1fba74}
+.dc-v.tc{color:var(--teal)}.dc-v.oc{color:#ffaa77}
 
 /* PRODUCT HEAD COLORS */
 .head-floor{background:linear-gradient(135deg,#1a3a5c,#0f1e35)}
@@ -87,6 +89,7 @@ input.res{background:var(--teal-light);border-color:#a0ded7;color:#0a7a6e;font-w
 .head-bath{background:linear-gradient(135deg,#4a1a5c,#7c3aed)}
 .head-toilet{background:linear-gradient(135deg,#5c2a0a,#f46b2b)}
 .head-hand{background:linear-gradient(135deg,#1a4a2a,#1fba74)}
+.head-glass{background:linear-gradient(135deg,#0c2a5c,#3b82f6)}
 
 /* SAVE / SHARE */
 .save-btn{width:100%;padding:14px;background:var(--teal);color:#fff;border:none;border-radius:11px;font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
@@ -109,10 +112,10 @@ input.res{background:var(--teal-light);border-color:#a0ded7;color:#0a7a6e;font-w
 .pb.sel{background:var(--teal);border-color:var(--teal);color:#fff}
 .pb.sel .pbml{color:#fff}
 
-/* PRODUCT SELECTOR */
-.prod-selector{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:12px}
-.psel-btn{padding:8px 3px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;font-size:10px;font-weight:700;color:var(--muted);text-align:center;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;line-height:1.4}
-.psel-btn .pi{font-size:17px;display:block;margin-bottom:2px}
+/* PRODUCT SELECTOR — 6 products, 3 per row */
+.prod-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-bottom:12px}
+.psel-btn{padding:9px 3px;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;font-size:10px;font-weight:700;color:var(--muted);text-align:center;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;line-height:1.4}
+.psel-btn .pi{font-size:18px;display:block;margin-bottom:3px}
 .psel-btn.sel{border-color:var(--teal);background:var(--teal-light);color:var(--teal-d)}
 .psel-btn.unset{opacity:.4}
 
@@ -175,6 +178,19 @@ input.res{background:var(--teal-light);border-color:#a0ded7;color:#0a7a6e;font-w
 .prod-result{background:var(--teal-light);border-radius:9px;padding:9px 11px;margin-top:9px;display:flex;justify-content:space-between;align-items:center}
 .prl{font-size:11px;color:#0a7a6e;font-weight:600}
 .prv{font-size:14px;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--teal)}
+
+/* WHATSAPP BILL */
+.wa-bill-box{background:var(--white);border-radius:var(--radius);border:2px solid #25d366;margin-top:10px;overflow:hidden;box-shadow:var(--shadow)}
+.wa-bill-head{background:#25d366;padding:12px 14px;display:flex;align-items:center;gap:8px}
+.wa-bill-head span{font-size:14px;font-weight:800;color:#fff}
+.wa-bill-body{padding:14px}
+.wa-bill-fields{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}
+.wa-field label{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;display:block;margin-bottom:4px}
+.wa-field input{font-size:13px;padding:8px 10px}
+.bill-preview{background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:12px;font-family:'JetBrains Mono',monospace;font-size:12px;line-height:1.7;color:#14532d;white-space:pre-wrap;word-break:break-word;margin-bottom:10px;min-height:60px}
+.wa-share-btn{width:100%;padding:13px;background:#25d366;color:#fff;border:none;border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px}
+.wa-share-btn:active{background:#1da851}
+.wa-copy-btn{width:100%;padding:11px;background:var(--white);color:var(--text);border:1.5px solid var(--border);border-radius:10px;font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;cursor:pointer;margin-top:6px}
 </style>
 </head>
 <body>
@@ -196,6 +212,7 @@ input.res{background:var(--teal-light);border-color:#a0ded7;color:#0a7a6e;font-w
 <div id="tab-db" class="tab-panel active">
   <div class="info-pill">🗄️ Set costs here once — all other tabs auto-fill when you select a product.</div>
 
+  <!-- FLOOR CLEANER -->
   <div class="db-card">
     <div class="db-head head-floor"><span class="db-icon">🧹</span><span class="db-name">Floor Cleaner</span><span class="db-status empty" id="dbs-0">Not Set</span></div>
     <div class="db-body">
@@ -213,6 +230,7 @@ input.res{background:var(--teal-light);border-color:#a0ded7;color:#0a7a6e;font-w
     </div>
   </div>
 
+  <!-- DISH WASH -->
   <div class="db-card">
     <div class="db-head head-dish"><span class="db-icon">🍽️</span><span class="db-name">Dish Wash</span><span class="db-status empty" id="dbs-1">Not Set</span></div>
     <div class="db-body">
@@ -230,6 +248,7 @@ input.res{background:var(--teal-light);border-color:#a0ded7;color:#0a7a6e;font-w
     </div>
   </div>
 
+  <!-- BATHROOM CLEANER -->
   <div class="db-card">
     <div class="db-head head-bath"><span class="db-icon">🚿</span><span class="db-name">Bathroom Cleaner</span><span class="db-status empty" id="dbs-2">Not Set</span></div>
     <div class="db-body">
@@ -247,6 +266,7 @@ input.res{background:var(--teal-light);border-color:#a0ded7;color:#0a7a6e;font-w
     </div>
   </div>
 
+  <!-- TOILET CLEANER -->
   <div class="db-card">
     <div class="db-head head-toilet"><span class="db-icon">🚽</span><span class="db-name">Toilet Cleaner</span><span class="db-status empty" id="dbs-3">Not Set</span></div>
     <div class="db-body">
@@ -264,6 +284,7 @@ input.res{background:var(--teal-light);border-color:#a0ded7;color:#0a7a6e;font-w
     </div>
   </div>
 
+  <!-- HAND WASH POWDER -->
   <div class="db-card">
     <div class="db-head head-hand"><span class="db-icon">🧴</span><span class="db-name">Hand Wash Powder</span><span class="db-status empty" id="dbs-4">Not Set</span></div>
     <div class="db-body">
@@ -281,6 +302,24 @@ input.res{background:var(--teal-light);border-color:#a0ded7;color:#0a7a6e;font-w
     </div>
   </div>
 
+  <!-- GLASS CLEANER -->
+  <div class="db-card">
+    <div class="db-head head-glass"><span class="db-icon">🪟</span><span class="db-name">Glass Cleaner</span><span class="db-status empty" id="dbs-5">Not Set</span></div>
+    <div class="db-body">
+      <div class="two-col">
+        <div class="field"><label>Price/kg <span class="gst-badge">excl.GST</span></label><div class="iw px-in"><span class="px">₹</span><input type="number" id="db-pkg-5" placeholder="65" oninput="liveDB(5)"></div></div>
+        <div class="field"><label>Stock in hand</label><div class="iw sx-in"><input type="number" id="db-stock-5" placeholder="10" oninput="liveDB(5)"><span class="sx">kg</span></div></div>
+        <div class="field"><label>Grams per litre</label><div class="iw sx-in"><input type="number" id="db-gpl-5" placeholder="40" oninput="liveDB(5)"><span class="sx">g/L</span></div></div>
+        <div class="field"><label>Mfg cost/sachet</label><div class="iw px-in"><span class="px">₹</span><input type="number" id="db-mfg-5" placeholder="2.00" oninput="liveDB(5)"></div></div>
+      </div>
+      <div class="db-computed">
+        <div><div class="dc-l">₹/kg+GST</div><div class="dc-v tc" id="dc-gst-5">₹—</div></div>
+        <div><div class="dc-l">Cost/litre</div><div class="dc-v" id="dc-litre-5">₹—</div></div>
+        <div><div class="dc-l">Stock Value</div><div class="dc-v oc" id="dc-stock-5">₹—</div></div>
+      </div>
+    </div>
+  </div>
+
   <button class="save-btn" onclick="saveDB()">💾 Save &amp; Sync to Cloud</button>
   <div id="save-msg"></div>
 
@@ -293,7 +332,7 @@ input.res{background:var(--teal-light);border-color:#a0ded7;color:#0a7a6e;font-w
       <input type="file" id="imp-input" accept=".json" style="display:none" onchange="importDB(event)">
     </div>
     <div id="import-msg"></div>
-    <div class="cloud-note">☁️ <strong>Cloud sync ON.</strong> Anyone who opens this app link sees the same prices in real time.</div>
+    <div class="cloud-note">☁️ <strong>Cloud sync ON.</strong> Anyone who opens this link sees the same prices in real time.</div>
   </div>
 
   <div style="text-align:center;margin-top:12px;padding-bottom:4px">
@@ -306,11 +345,12 @@ input.res{background:var(--teal-light);border-color:#a0ded7;color:#0a7a6e;font-w
 
   <div class="slabel"><span class="snum">1</span> Select Product</div>
   <div class="prod-selector">
-    <button class="psel-btn" id="ps-0" onclick="pickSingle(0)"><span class="pi">🧹</span>Floor</button>
-    <button class="psel-btn" id="ps-1" onclick="pickSingle(1)"><span class="pi">🍽️</span>Dish</button>
-    <button class="psel-btn" id="ps-2" onclick="pickSingle(2)"><span class="pi">🚿</span>Bath</button>
+    <button class="psel-btn" id="ps-0" onclick="pickSingle(0)"><span class="pi">🧹</span>Floor Cleaner</button>
+    <button class="psel-btn" id="ps-1" onclick="pickSingle(1)"><span class="pi">🍽️</span>Dish Wash</button>
+    <button class="psel-btn" id="ps-2" onclick="pickSingle(2)"><span class="pi">🚿</span>Bathroom</button>
     <button class="psel-btn" id="ps-3" onclick="pickSingle(3)"><span class="pi">🚽</span>Toilet</button>
-    <button class="psel-btn" id="ps-4" onclick="pickSingle(4)"><span class="pi">🧴</span>Hand</button>
+    <button class="psel-btn" id="ps-4" onclick="pickSingle(4)"><span class="pi">🧴</span>Hand Wash</button>
+    <button class="psel-btn" id="ps-5" onclick="pickSingle(5)"><span class="pi">🪟</span>Glass Cleaner</button>
   </div>
 
   <div id="s-fetched" style="display:none">
@@ -339,12 +379,11 @@ input.res{background:var(--teal-light);border-color:#a0ded7;color:#0a7a6e;font-w
     </div>
     <div class="two-col">
       <div class="field"><label>Powder/sachet <span class="auto-badge">AUTO</span></label>
-        <div class="iw sx-in"><input type="number" id="s-grams" class="res" readonly><span class="sx" style="color:var(--teal)">g</span></div>
-        <div class="hint">g/L × pack litres</div></div>
+        <div class="iw sx-in"><input type="number" id="s-grams" class="res" readonly><span class="sx" style="color:var(--teal)">g</span></div></div>
       <div class="field"><label>Pack size (ml)</label>
         <div class="iw sx-in"><input type="number" id="s-ml" placeholder="500" oninput="calcSingle()"><span class="sx">ml</span></div></div>
     </div>
-    <div class="how-box">💡 e.g. 80g/L × 0.5L pack = <strong>40g</strong> powder per sachet.</div>
+    <div class="how-box">💡 g/L × pack size in litres = grams of powder per sachet.</div>
     <div class="field"><label>Yield per sachet <span class="auto-badge">AUTO</span></label>
       <div class="iw sx-in"><input type="number" id="s-liters" class="res" readonly><span class="sx" style="color:var(--teal)">L</span></div></div>
   </div>
@@ -382,11 +421,12 @@ input.res{background:var(--teal-light);border-color:#a0ded7;color:#0a7a6e;font-w
 
   <div class="slabel"><span class="snum">1</span> Select Product</div>
   <div class="prod-selector">
-    <button class="psel-btn" id="bp-0" onclick="pickBulk(0)"><span class="pi">🧹</span>Floor</button>
-    <button class="psel-btn" id="bp-1" onclick="pickBulk(1)"><span class="pi">🍽️</span>Dish</button>
-    <button class="psel-btn" id="bp-2" onclick="pickBulk(2)"><span class="pi">🚿</span>Bath</button>
+    <button class="psel-btn" id="bp-0" onclick="pickBulk(0)"><span class="pi">🧹</span>Floor Cleaner</button>
+    <button class="psel-btn" id="bp-1" onclick="pickBulk(1)"><span class="pi">🍽️</span>Dish Wash</button>
+    <button class="psel-btn" id="bp-2" onclick="pickBulk(2)"><span class="pi">🚿</span>Bathroom</button>
     <button class="psel-btn" id="bp-3" onclick="pickBulk(3)"><span class="pi">🚽</span>Toilet</button>
-    <button class="psel-btn" id="bp-4" onclick="pickBulk(4)"><span class="pi">🧴</span>Hand</button>
+    <button class="psel-btn" id="bp-4" onclick="pickBulk(4)"><span class="pi">🧴</span>Hand Wash</button>
+    <button class="psel-btn" id="bp-5" onclick="pickBulk(5)"><span class="pi">🪟</span>Glass Cleaner</button>
   </div>
 
   <div id="b-fetched" style="display:none">
@@ -439,7 +479,7 @@ input.res{background:var(--teal-light);border-color:#a0ded7;color:#0a7a6e;font-w
 
 <!-- ══════════ TAB: BUNDLE ══════════ -->
 <div id="tab-bundle" class="tab-panel">
-  <div class="info-pill">🛒 Add multiple products. Each auto-fetches its own data from DB.</div>
+  <div class="info-pill">🛒 Add multiple products. Each auto-fetches data from DB. Generate a WhatsApp bill at the bottom.</div>
 
   <div class="slabel"><span class="snum">1</span> Products in Bundle</div>
   <div id="bprods"></div>
@@ -470,44 +510,78 @@ input.res{background:var(--teal-light);border-color:#a0ded7;color:#0a7a6e;font-w
         <div class="rpill gp"><div class="rpl">Your Profit</div><div class="rpv" id="bn9">₹—</div><div class="rps" id="bn9s">—% margin</div></div>
       </div>
     </div>
+
+    <!-- WHATSAPP BILL -->
+    <div class="slabel"><span class="snum">4</span> WhatsApp Bill</div>
+    <div class="wa-bill-box">
+      <div class="wa-bill-head">
+        <span>💬</span><span>Generate Bill to Share</span>
+      </div>
+      <div class="wa-bill-body">
+        <div class="wa-bill-fields">
+          <div class="wa-field field">
+            <label>Your Business Name</label>
+            <input type="text" id="wa-biz" placeholder="e.g. Clean Supp Co." oninput="generateBill()">
+          </div>
+          <div class="wa-field field">
+            <label>Customer Name</label>
+            <input type="text" id="wa-cust" placeholder="e.g. Hotel Sunrise" oninput="generateBill()">
+          </div>
+          <div class="wa-field field">
+            <label>Your Phone</label>
+            <input type="text" id="wa-phone" placeholder="98XXXXXXXX" oninput="generateBill()">
+          </div>
+          <div class="wa-field field">
+            <label>Delivery Date</label>
+            <input type="text" id="wa-date" placeholder="e.g. 26 Feb 2026" oninput="generateBill()">
+          </div>
+        </div>
+        <div class="bill-preview" id="bill-preview">Fill in products above and enter your details to generate the bill.</div>
+        <button class="wa-share-btn" onclick="shareWA()">📲 Share on WhatsApp</button>
+        <button class="wa-copy-btn" onclick="copyBill()">📋 Copy Bill Text</button>
+      </div>
+    </div>
+
   </div>
 </div>
 
 <script>
 /* ══ SUPABASE ══ */
-const SB_URL = 'https://excvwxbygziimauxjmqt.supabase.co';
-const SB_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV4Y3Z3eGJ5Z3ppaW1hdXhqbXF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MzU4NTYsImV4cCI6MjA4NzQxMTg1Nn0.PfrnSJszOze5BMUNSk9X73Zdz888DZSY7hXhzPSPJbQ';
-const SB_H   = {'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'};
+const SB_URL='https://excvwxbygziimauxjmqt.supabase.co';
+const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV4Y3Z3eGJ5Z3ppaW1hdXhqbXF0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE4MzU4NTYsImV4cCI6MjA4NzQxMTg1Nn0.PfrnSJszOze5BMUNSk9X73Zdz888DZSY7hXhzPSPJbQ';
+const SB_H={'apikey':SB_KEY,'Authorization':'Bearer '+SB_KEY,'Content-Type':'application/json','Prefer':'return=minimal'};
 
-/* ══ GLOBALS ══ */
-const GST   = 0.18;
-const LS_KEY= 'cleancalc_v3';
-const NAMES = ['Floor Cleaner','Dish Wash','Bathroom Cleaner','Toilet Cleaner','Hand Wash Powder'];
-const ICONS = ['🧹','🍽️','🚿','🚽','🧴'];
-const HEADS = ['head-floor','head-dish','head-bath','head-toilet','head-hand'];
+/* ══ CONSTANTS ══ */
+const GST=0.18;
+const LS_KEY='cleancalc_v4';
+const NAMES=['Floor Cleaner','Dish Wash','Bathroom Cleaner','Toilet Cleaner','Hand Wash Powder','Glass Cleaner'];
+const ICONS=['🧹','🍽️','🚿','🚽','🧴','🪟'];
+const HEADS=['head-floor','head-dish','head-bath','head-toilet','head-hand','head-glass'];
+const N=6; // total products
 
-const f  = (n,d=2)=>(!n||isNaN(n))?'—':Number(n).toFixed(d);
-const fR = n=>(n&&!isNaN(n)&&n>0)?'₹'+Number(n).toFixed(2):'₹—';
-const gv = id=>{const v=parseFloat(document.getElementById(id)?.value);return isNaN(v)?0:v;};
-const sv = (id,v)=>{const el=document.getElementById(id);if(el)el.value=(v&&!isNaN(v)&&v>0)?Number(v).toFixed(2):'';};
-const st = (id,t)=>{const el=document.getElementById(id);if(el)el.textContent=t;};
+const f  =(n,d=2)=>(!n||isNaN(n))?'—':Number(n).toFixed(d);
+const fR =n=>(n&&!isNaN(n)&&n>0)?'₹'+Number(n).toFixed(2):'₹—';
+const gv =id=>{const v=parseFloat(document.getElementById(id)?.value);return isNaN(v)?0:v;};
+const sv =(id,v)=>{const el=document.getElementById(id);if(el)el.value=(v&&!isNaN(v)&&v>0)?Number(v).toFixed(2):'';};
+const st =(id,t)=>{const el=document.getElementById(id);if(el)el.textContent=t;};
+const gs =id=>(document.getElementById(id)?.value||'').trim();
 
-let db=[null,null,null,null,null];
+let db=Array(N).fill(null);
 
 /* ══ BADGE ══ */
 function badge(s){
   const el=document.getElementById('hbadge');
   const M={synced:'☁️ Cloud Synced',syncing:'⏳ Syncing…',local:'📱 Local Only',empty:'DB Empty',error:'⚠️ Error'};
-  el.textContent=M[s]||'DB Empty'; el.className=s||'empty';
+  el.textContent=M[s]||'DB Empty';el.className=s||'empty';
 }
 
 /* ══ POPULATE FIELDS ══ */
 function populateFields(){
-  for(let i=0;i<5;i++){
+  for(let i=0;i<N;i++){
     if(!db[i]) continue;
     const p=db[i];
     const sf=(id,v)=>{const el=document.getElementById(id);if(el&&v!=null)el.value=Number(v).toFixed(2);};
-    sf('db-pkg-'+i,p.pkg); sf('db-stock-'+i,p.stock||0); sf('db-gpl-'+i,p.gpl); sf('db-mfg-'+i,p.mfg);
+    sf('db-pkg-'+i,p.pkg);sf('db-stock-'+i,p.stock||0);sf('db-gpl-'+i,p.gpl);sf('db-mfg-'+i,p.mfg);
   }
 }
 
@@ -522,11 +596,11 @@ async function loadFromCloud(){
     let any=false;
     rows.forEach(r=>{
       const i=parseInt(r.id);
-      if(i>=0&&i<5&&r.pkg>0&&r.gpl>0&&r.mfg>0){db[i]={pkg:+r.pkg,stock:+(r.stock||0),gpl:+r.gpl,mfg:+r.mfg};any=true;}
-      else db[i]=null;
+      if(i>=0&&i<N&&r.pkg>0&&r.gpl>0&&r.mfg>0){db[i]={pkg:+r.pkg,stock:+(r.stock||0),gpl:+r.gpl,mfg:+r.mfg};any=true;}
+      else if(i>=0&&i<N) db[i]=null;
     });
     try{localStorage.setItem(LS_KEY,JSON.stringify(db));}catch(e){}
-    populateFields(); for(let i=0;i<5;i++) liveDB(i); refreshSel();
+    populateFields();for(let i=0;i<N;i++)liveDB(i);refreshSel();
     badge(any?'synced':'empty');
   }catch(e){console.warn('Cloud load failed:',e);loadFromLocal();}
 }
@@ -537,8 +611,10 @@ function loadFromLocal(){
     const raw=localStorage.getItem(LS_KEY);
     if(!raw){badge('empty');return;}
     const s=JSON.parse(raw);
-    if(!Array.isArray(s)||s.length!==5){badge('empty');return;}
-    db=s; populateFields(); for(let i=0;i<5;i++) liveDB(i); refreshSel();
+    if(!Array.isArray(s)){badge('empty');return;}
+    // support both old (5 items) and new (6 items) format
+    for(let i=0;i<N;i++) db[i]=s[i]||null;
+    populateFields();for(let i=0;i<N;i++)liveDB(i);refreshSel();
     badge(db.some(x=>x!==null)?'local':'empty');
   }catch(e){badge('empty');}
 }
@@ -546,19 +622,19 @@ function loadFromLocal(){
 /* ══ LIVE DB COMPUTED ══ */
 function liveDB(i){
   const pkg=gv('db-pkg-'+i),stock=gv('db-stock-'+i),gpl=gv('db-gpl-'+i),mfg=gv('db-mfg-'+i);
-  const pkgG=pkg*(1+GST), cpl=pkgG>0&&gpl>0?(pkgG/1000)*gpl:0, stV=pkg>0&&stock>0?pkg*stock*(1+GST):0;
-  st('dc-gst-'+i,   pkgG>0?'₹'+f(pkgG):'₹—');
-  st('dc-litre-'+i, cpl>0?'₹'+f(cpl):'₹—');
-  st('dc-stock-'+i, stV>0?'₹'+f(stV):'₹—');
+  const pkgG=pkg*(1+GST),cpl=pkgG>0&&gpl>0?(pkgG/1000)*gpl:0,stV=pkg>0&&stock>0?pkg*stock*(1+GST):0;
+  st('dc-gst-'+i,pkgG>0?'₹'+f(pkgG):'₹—');
+  st('dc-litre-'+i,cpl>0?'₹'+f(cpl):'₹—');
+  st('dc-stock-'+i,stV>0?'₹'+f(stV):'₹—');
   const b=document.getElementById('dbs-'+i);
-  if(b){b.textContent=pkg>0&&gpl>0&&mfg>0?'✓ Set':'Not Set';b.className='db-status '+(pkg>0&&gpl>0&&mfg>0?'ok':'empty');}
+  if(b){const ok=pkg>0&&gpl>0&&mfg>0;b.textContent=ok?'✓ Set':'Not Set';b.className='db-status '+(ok?'ok':'empty');}
 }
 
 /* ══ SAVE DB ══ */
 async function saveDB(){
-  for(let i=0;i<5;i++){
+  for(let i=0;i<N;i++){
     const pkg=gv('db-pkg-'+i),stock=gv('db-stock-'+i),gpl=gv('db-gpl-'+i),mfg=gv('db-mfg-'+i);
-    db[i]=(pkg>0&&gpl>0&&mfg>0)?{pkg,stock,gpl,mfg}:null; liveDB(i);
+    db[i]=(pkg>0&&gpl>0&&mfg>0)?{pkg,stock,gpl,mfg}:null;liveDB(i);
   }
   refreshSel();
   try{localStorage.setItem(LS_KEY,JSON.stringify(db));}catch(e){}
@@ -568,13 +644,13 @@ async function saveDB(){
   msg.textContent='⏳ Saving to cloud…';
   try{
     await Promise.all(db.map((p,i)=>{
-      if(!p) return Promise.resolve();
-      return fetch(SB_URL+'/rest/v1/products?id=eq.'+i,{method:'PATCH',headers:SB_H,body:JSON.stringify({pkg:p.pkg,stock:p.stock||0,gpl:p.gpl,mfg:p.mfg})});
+      if(!p)return Promise.resolve();
+      return fetch(SB_URL+'/rest/v1/products?id=eq.'+i,{method:'PATCH',headers:SB_H,body:JSON.stringify({pkg:p.pkg,stock:p.stock||0,gpl:p.gpl,mfg:p.mfg,name:NAMES[i]})});
     }));
-    badge('synced'); msg.style.color='var(--green)'; msg.textContent='✅ Saved! All devices see these prices now.';
+    badge('synced');msg.style.color='var(--green)';msg.textContent='✅ Saved! All devices see these prices now.';
     setTimeout(()=>msg.style.display='none',4000);
   }catch(e){
-    badge('local'); msg.style.color='var(--orange)'; msg.textContent='📱 Saved locally. Cloud sync failed.';
+    badge('local');msg.style.color='var(--orange)';msg.textContent='📱 Saved locally. Cloud sync failed.';
     setTimeout(()=>msg.style.display='none',5000);
   }
 }
@@ -582,54 +658,34 @@ async function saveDB(){
 /* ══ EXPORT ══ */
 function exportDB(){
   if(!db.some(x=>x!==null)){alert('No data to export. Fill Products DB first.');return;}
-  const data={app:'CleanCalc Pro',exported:new Date().toISOString(),version:3,products:db.map((p,i)=>({id:i,name:NAMES[i],...(p||{})}))};
+  const data={app:'CleanCalc Pro',exported:new Date().toISOString(),version:4,products:db.map((p,i)=>({id:i,name:NAMES[i],...(p||{})}))};
   const a=document.createElement('a');
   a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));
-  a.download='cleancalc-'+new Date().toISOString().slice(0,10)+'.json'; a.click();
+  a.download='cleancalc-'+new Date().toISOString().slice(0,10)+'.json';a.click();
 }
 
 /* ══ IMPORT ══ */
 function importDB(e){
-  const file=e.target.files[0]; if(!file) return;
+  const file=e.target.files[0];if(!file)return;
   const msg=document.getElementById('import-msg');
-  new FileReader().addEventListener('load',async ev=>{
-    try{
-      const data=JSON.parse(ev.target.result);
-      if(!data.products||!Array.isArray(data.products)) throw new Error('bad');
-      data.products.forEach(p=>{if(p.id>=0&&p.id<5&&p.pkg>0&&p.gpl>0&&p.mfg>0) db[p.id]={pkg:+p.pkg,stock:+(p.stock||0),gpl:+p.gpl,mfg:+p.mfg};});
-      populateFields(); for(let i=0;i<5;i++) liveDB(i); refreshSel();
-      try{localStorage.setItem(LS_KEY,JSON.stringify(db));}catch(err){}
-      msg.style.cssText='display:block;color:var(--green);font-weight:700;text-align:center;margin-top:6px;font-size:12px';
-      msg.textContent='✅ Imported! Syncing to cloud…';
-      try{
-        await Promise.all(db.map((p,i)=>{if(!p)return Promise.resolve();return fetch(SB_URL+'/rest/v1/products?id=eq.'+i,{method:'PATCH',headers:SB_H,body:JSON.stringify({pkg:p.pkg,stock:p.stock||0,gpl:p.gpl,mfg:p.mfg})});}));
-        msg.textContent='✅ Imported & synced to cloud!'; badge('synced');
-      }catch(err){msg.textContent='✅ Imported locally. Cloud sync failed.'; badge('local');}
-      setTimeout(()=>msg.style.display='none',4000);
-    }catch(err){
-      msg.style.cssText='display:block;color:var(--orange);font-weight:700;text-align:center;margin-top:6px;font-size:12px';
-      msg.textContent='❌ Invalid file.'; setTimeout(()=>msg.style.display='none',3000);
-    }
-    e.target.value='';
-  },{once:true}).readAsText=function(){};
   const reader=new FileReader();
   reader.onload=async ev=>{
     try{
       const data=JSON.parse(ev.target.result);
-      if(!data.products||!Array.isArray(data.products)) throw new Error('bad');
-      data.products.forEach(p=>{if(p.id>=0&&p.id<5&&p.pkg>0&&p.gpl>0&&p.mfg>0) db[p.id]={pkg:+p.pkg,stock:+(p.stock||0),gpl:+p.gpl,mfg:+p.mfg};});
-      populateFields(); for(let i=0;i<5;i++) liveDB(i); refreshSel();
+      if(!data.products||!Array.isArray(data.products))throw new Error('bad');
+      data.products.forEach(p=>{if(p.id>=0&&p.id<N&&p.pkg>0&&p.gpl>0&&p.mfg>0)db[p.id]={pkg:+p.pkg,stock:+(p.stock||0),gpl:+p.gpl,mfg:+p.mfg};});
+      populateFields();for(let i=0;i<N;i++)liveDB(i);refreshSel();
       try{localStorage.setItem(LS_KEY,JSON.stringify(db));}catch(err){}
       msg.style.cssText='display:block;color:var(--green);font-weight:700;text-align:center;margin-top:6px;font-size:12px';
       msg.textContent='✅ Imported! Syncing to cloud…';
       try{
-        await Promise.all(db.map((p,i)=>{if(!p)return Promise.resolve();return fetch(SB_URL+'/rest/v1/products?id=eq.'+i,{method:'PATCH',headers:SB_H,body:JSON.stringify({pkg:p.pkg,stock:p.stock||0,gpl:p.gpl,mfg:p.mfg})});}));
-        msg.textContent='✅ Imported & synced to cloud!'; badge('synced');
-      }catch(err){msg.textContent='✅ Imported locally.'; badge('local');}
+        await Promise.all(db.map((p,i)=>{if(!p)return Promise.resolve();return fetch(SB_URL+'/rest/v1/products?id=eq.'+i,{method:'PATCH',headers:SB_H,body:JSON.stringify({pkg:p.pkg,stock:p.stock||0,gpl:p.gpl,mfg:p.mfg,name:NAMES[i]})});}));
+        msg.textContent='✅ Imported & synced to cloud!';badge('synced');
+      }catch(err){msg.textContent='✅ Imported locally.';badge('local');}
       setTimeout(()=>msg.style.display='none',4000);
     }catch(err){
       msg.style.cssText='display:block;color:var(--orange);font-weight:700;text-align:center;margin-top:6px;font-size:12px';
-      msg.textContent='❌ Invalid file.'; setTimeout(()=>msg.style.display='none',3000);
+      msg.textContent='❌ Invalid file.';setTimeout(()=>msg.style.display='none',3000);
     }
     e.target.value='';
   };
@@ -638,17 +694,17 @@ function importDB(e){
 
 /* ══ CLEAR ══ */
 async function clearDB(){
-  if(!confirm('Clear all product data from device and cloud? Cannot be undone.')) return;
-  localStorage.removeItem(LS_KEY); db=[null,null,null,null,null];
-  for(let i=0;i<5;i++){['db-pkg','db-stock','db-gpl','db-mfg'].forEach(k=>{const el=document.getElementById(k+'-'+i);if(el)el.value='';});liveDB(i);}
-  refreshSel(); badge('empty');
-  try{await Promise.all([0,1,2,3,4].map(i=>fetch(SB_URL+'/rest/v1/products?id=eq.'+i,{method:'PATCH',headers:SB_H,body:JSON.stringify({pkg:null,stock:null,gpl:null,mfg:null})})));}catch(e){}
+  if(!confirm('Clear all product data from device and cloud? Cannot be undone.'))return;
+  localStorage.removeItem(LS_KEY);db=Array(N).fill(null);
+  for(let i=0;i<N;i++){['db-pkg','db-stock','db-gpl','db-mfg'].forEach(k=>{const el=document.getElementById(k+'-'+i);if(el)el.value='';});liveDB(i);}
+  refreshSel();badge('empty');
+  try{await Promise.all([...Array(N).keys()].map(i=>fetch(SB_URL+'/rest/v1/products?id=eq.'+i,{method:'PATCH',headers:SB_H,body:JSON.stringify({pkg:null,stock:null,gpl:null,mfg:null})})));}catch(e){}
   alert('All data cleared.');
 }
 
 /* ══ REFRESH SELECTORS ══ */
 function refreshSel(){
-  for(let i=0;i<5;i++){
+  for(let i=0;i<N;i++){
     document.getElementById('ps-'+i)?.classList.toggle('unset',!db[i]);
     document.getElementById('bp-'+i)?.classList.toggle('unset',!db[i]);
   }
@@ -665,19 +721,17 @@ function pickSingle(i){
   sf.style.display='block';sns.style.display='none';
   const p=db[i],g=p.pkg*(1+GST);
   st('s-ftitle',ICONS[i]+' '+NAMES[i]+' — from DB');
-  st('s-fpkg','₹'+f(p.pkg)); st('s-fpgst','₹'+f(g));
-  st('s-fgpl',f(p.gpl)+' g/L'); st('s-fmfg','₹'+f(p.mfg));
+  st('s-fpkg','₹'+f(p.pkg));st('s-fpgst','₹'+f(g));
+  st('s-fgpl',f(p.gpl)+' g/L');st('s-fmfg','₹'+f(p.mfg));
   st('s-fstock',p.stock>0?f(p.stock)+' kg':'—');
   calcSingle();
 }
-
 function pickPack(ml,btn){
   document.querySelectorAll('.pb').forEach(b=>b.classList.remove('sel'));
   btn.classList.add('sel');
   document.getElementById('s-ml').value=ml;
   calcSingle();
 }
-
 function calcSingle(){
   const ml=gv('s-ml'),mg=gv('s-margin'),lit=ml>0?ml/1000:0;
   sv('s-liters',lit>0?lit:null);
@@ -685,12 +739,12 @@ function calcSingle(){
   if(sProd>=0&&db[sProd]){const p=db[sProd];pkgG=p.pkg*(1+GST);mfg=p.mfg;grams=lit>0?p.gpl*lit:0;}
   sv('s-grams',grams>0?grams:null);
   const pwd=pkgG>0&&grams>0?(pkgG/1000)*grams:0;
-  sv('s-landed',pwd>0?pwd:null); sv('s-prod',mfg>0?mfg:null);
+  sv('s-landed',pwd>0?pwd:null);sv('s-prod',mfg>0?mfg:null);
   const tot=pwd+mfg,prof=tot*(mg/100),sell=tot+prof;
   const cpl=lit>0?tot/lit:0,spl=lit>0?sell/lit:0;
-  st('r1',fR(pwd)); st('r2',mfg>0?fR(mfg):'₹—'); st('r3',fR(tot)); st('r4',prof>0?fR(prof):'₹—');
-  st('r5',fR(sell)); st('r5s',ml>0?ml+'ml pack':'—ml pack');
-  st('r6',sell>0?fR(sell-tot):'₹—'); st('r6s',mg>0?mg+'% margin':'—% margin');
+  st('r1',fR(pwd));st('r2',mfg>0?fR(mfg):'₹—');st('r3',fR(tot));st('r4',prof>0?fR(prof):'₹—');
+  st('r5',fR(sell));st('r5s',ml>0?ml+'ml pack':'—ml pack');
+  st('r6',sell>0?fR(sell-tot):'₹—');st('r6s',mg>0?mg+'% margin':'—% margin');
   const lb=document.getElementById('litre-box');
   if(lit>0&&tot>0){
     lb.style.display='block';
@@ -710,17 +764,16 @@ function pickBulk(i){
   bf.style.display='block';bns.style.display='none';
   const p=db[i],g=p.pkg*(1+GST);
   st('b-ftitle',ICONS[i]+' '+NAMES[i]);
-  st('b-fpgst','₹'+f(g)); st('b-fgpl',f(p.gpl)+' g/L');
-  st('b-fmfg','₹'+f(p.mfg)); st('b-fstock',p.stock>0?f(p.stock)+' kg':'—');
+  st('b-fpgst','₹'+f(g));st('b-fgpl',f(p.gpl)+' g/L');
+  st('b-fmfg','₹'+f(p.mfg));st('b-fstock',p.stock>0?f(p.stock)+' kg':'—');
   calcBulk();
 }
-
 function calcBulk(){
   const n=gv('b-count'),ml=gv('b-ml'),mg=gv('b-margin'),lit=ml>0?ml/1000:0;
   let pkgG=0,gpl=0,mfg=0,stk=0;
   if(bProd>=0&&db[bProd]){const p=db[bProd];pkgG=p.pkg*(1+GST);gpl=p.gpl;mfg=p.mfg;stk=p.stock||0;}
   const gEa=lit>0?gpl*lit:0,pEa=pkgG>0&&gEa>0?(pkgG/1000)*gEa:0;
-  sv('b-grams',gEa>0?gEa:null); sv('b-prod',mfg>0?mfg:null); sv('b-landed',pEa>0?pEa:null);
+  sv('b-grams',gEa>0?gEa:null);sv('b-prod',mfg>0?mfg:null);sv('b-landed',pEa>0?pEa:null);
   const tG=n*gEa,tL=n*lit,tLd=n*pEa,tPd=n*mfg,tC=tLd+tPd;
   const sell=tC*(1+mg/100),perS=n>0?sell/n:0,profS=n>0?(sell-tC)/n:0;
   const stLeft=stk>0&&tG>0?stk-(tG/1000):null;
@@ -734,6 +787,9 @@ function calcBulk(){
 
 /* ══ BUNDLE ══ */
 let bItems=[],nid=1;
+// store per-item calc results for bill generation
+let billLines=[];
+
 function addBundle(){bItems.push(nid++);renderBundle();}
 function removeBundle(id){
   bItems=bItems.filter(x=>x!==id);
@@ -745,7 +801,7 @@ function removeBundle(id){
 function renderBundle(){
   const c=document.getElementById('bprods');
   bItems.forEach(id=>{
-    if(document.getElementById('bpc-'+id)) return;
+    if(document.getElementById('bpc-'+id))return;
     const d=document.createElement('div');
     d.className='bpcard';d.id='bpc-'+id;
     d.innerHTML=
@@ -787,6 +843,7 @@ function onBC(id){
 }
 function calcBundle(){
   let tG=0,tL=0,tLd=0,tMfg=0,tSell=0,tS=0;
+  billLines=[];
   bItems.forEach(id=>{
     const sel=document.getElementById('bpsel-'+id);if(!sel)return;
     const i=parseInt(sel.value);
@@ -805,6 +862,7 @@ function calcBundle(){
       if(pSell>0){lbl.textContent=qty+'pcs × '+ml+'ml — cost ₹'+f(pC)+' — profit ₹'+f(pSell-pC);val.textContent='₹'+f(pSell);}
       else{lbl.textContent='Pick pack size to calculate';val.textContent='₹—';}
     }
+    if(qty>0&&ml>0&&pSell>0) billLines.push({name:NAMES[i],icon:ICONS[i],qty,ml,sellEach:pSell/qty,sellTotal:pSell});
   });
   const tC=tLd+tMfg;
   const bunMg=parseFloat(document.getElementById('bun-mg')?.value);
@@ -815,6 +873,76 @@ function calcBundle(){
   st('bn4',fR(tC));st('bn5',dAmt>0?fR(dAmt):'₹0.00');st('bn6',fR(profit));st('bn7',tC>0?f(eff)+'%':'—');
   st('bn8',fR(final));st('bn8s',tS>0?tS+' sachets total':'total');
   st('bn9',fR(profit));st('bn9s',tC>0?f(eff)+'% margin':'—');
+  // store totals for bill
+  window._bundleFinal=final;window._bundleDisc=dAmt;window._bundleTotal=tS;
+  generateBill();
+}
+
+/* ══ WHATSAPP BILL ══ */
+function generateBill(){
+  const biz=gs('wa-biz')||'Your Business';
+  const cust=gs('wa-cust')||'Valued Customer';
+  const phone=gs('wa-phone');
+  const date=gs('wa-date')||new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+  const final=window._bundleFinal||0;
+  const disc=window._bundleDisc||0;
+  const lines=billLines||[];
+
+  if(lines.length===0){
+    document.getElementById('bill-preview').textContent='Add products to the bundle to generate the bill.';
+    return;
+  }
+
+  const sep='─────────────────────────';
+  let bill='';
+  bill+='🧴 *'+biz+'*\n';
+  bill+='📋 *Order Bill*\n';
+  bill+=sep+'\n';
+  bill+='👤 To: *'+cust+'*\n';
+  bill+='📅 Date: '+date+'\n';
+  bill+=sep+'\n';
+  bill+='*ITEMS*\n';
+  lines.forEach((l,idx)=>{
+    bill+=(idx+1)+'. '+l.icon+' '+l.name+'\n';
+    bill+='   '+l.qty+' sachet'+(l.qty>1?'s':'')+' × '+l.ml+'ml';
+    bill+='  →  ₹'+Number(l.sellEach).toFixed(2)+'/pc\n';
+    bill+='   Subtotal: ₹'+Number(l.sellTotal).toFixed(2)+'\n';
+  });
+  bill+=sep+'\n';
+  if(disc>0){
+    bill+='💰 Discount: -₹'+Number(disc).toFixed(2)+'\n';
+  }
+  bill+='✅ *TOTAL: ₹'+Number(final).toFixed(2)+'*\n';
+  bill+=sep+'\n';
+  if(phone) bill+='📞 Contact: '+phone+'\n';
+  bill+='\n_Thank you for your order!_ 🙏';
+
+  document.getElementById('bill-preview').textContent=bill;
+  window._billText=bill;
+}
+
+function shareWA(){
+  const text=window._billText||document.getElementById('bill-preview').textContent;
+  if(!text||text.includes('Add products')){alert('Please fill in the bundle products first.');return;}
+  const encoded=encodeURIComponent(text);
+  window.open('https://wa.me/?text='+encoded,'_blank');
+}
+
+function copyBill(){
+  const text=window._billText||document.getElementById('bill-preview').textContent;
+  if(!text||text.includes('Add products')){alert('Please fill in the bundle products first.');return;}
+  navigator.clipboard.writeText(text).then(()=>{
+    const btn=document.querySelector('.wa-copy-btn');
+    const orig=btn.textContent;
+    btn.textContent='✅ Copied!';
+    setTimeout(()=>btn.textContent=orig,2000);
+  }).catch(()=>{
+    // fallback
+    const ta=document.createElement('textarea');
+    ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    const btn=document.querySelector('.wa-copy-btn');
+    const orig=btn.textContent;btn.textContent='✅ Copied!';setTimeout(()=>btn.textContent=orig,2000);
+  });
 }
 
 /* ══ TABS ══ */
@@ -826,7 +954,12 @@ function showTab(name,btn){
 }
 
 /* ══ STARTUP ══ */
-document.addEventListener('DOMContentLoaded',()=>loadFromCloud());
+document.addEventListener('DOMContentLoaded',()=>{
+  // pre-fill today's date
+  const today=new Date().toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'});
+  const d=document.getElementById('wa-date');if(d)d.value=today;
+  loadFromCloud();
+});
 </script>
 </body>
 </html>
